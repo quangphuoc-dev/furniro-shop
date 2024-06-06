@@ -69,15 +69,16 @@ const ChangePersonalInformation = () => {
 
     return (
         <div className="change-pass-word-wrapper">
-            <div className="change-pass-word-container">
-                <div className="change-pass-word-container__title flex justify-center">
-                    <h3>My Profile</h3>
+            <div className="change-pass-word-container mx-10 my-10">
+                <div className="change-pass-word-container__title flex justify-center my-5">
+                    <h3 className="text-[24px] font-[500]">My Profile</h3>
                 </div>
                 <form
-                    className="change-pass-word-form flex flex-col items-center"
+                    className="change-pass-word-form flex flex-col"
                     onSubmit={handleSubmit(onValid)}
                 >
-                    <div className="change-pass-word-form__name">
+                    <div className="change-pass-word-form__name flex">
+                        <div className="w-[120px]">Full name</div>
                         <Controller
                             control={control}
                             name="fullName"
@@ -97,7 +98,8 @@ const ChangePersonalInformation = () => {
                         </span>
                     </div>
 
-                    <div className="change-pass-word-form__age">
+                    <div className="change-pass-word-form__age flex">
+                        <div className="w-[120px]">Age</div>
                         <Controller
                             control={control}
                             name="age"
@@ -114,7 +116,8 @@ const ChangePersonalInformation = () => {
                         </span>
                     </div>
 
-                    <div className="change-pass-word-form__address">
+                    <div className="change-pass-word-form__address flex">
+                        <div className="w-[120px]">Address</div>
                         <Controller
                             control={control}
                             name="address"
@@ -134,7 +137,8 @@ const ChangePersonalInformation = () => {
                         </span>
                     </div>
 
-                    <div className="change-pass-word-form__phone-number">
+                    <div className="change-pass-word-form__phone-number flex">
+                        <div className="w-[120px]">Phone</div>
                         <Controller
                             control={control}
                             name="phoneNumber"
@@ -154,7 +158,8 @@ const ChangePersonalInformation = () => {
                         </span>
                     </div>
 
-                    <div className="change-pass-word-form__email">
+                    <div className="change-pass-word-form__email flex">
+                        <div className="w-[120px]">Mail</div>
                         <Controller
                             control={control}
                             name="email"
@@ -171,8 +176,10 @@ const ChangePersonalInformation = () => {
                         </span>
                     </div>
 
-                    <div className="change-pass-word-form__gender-grp">
-                        <label htmlFor="">Gender: </label>
+                    <div className="change-pass-word-form__gender-grp flex">
+                        <label className="w-[120px] block" htmlFor="">
+                            Gender
+                        </label>
                         <Controller
                             control={control}
                             name="gender"
@@ -193,8 +200,10 @@ const ChangePersonalInformation = () => {
                         </span>
                     </div>
 
-                    <div className="change-pass-word-form__birth-day">
-                        <label htmlFor="">Date of birth: </label>
+                    <div className="change-pass-word-form__birth-day flex">
+                        <label className="w-[120px] bloxk" htmlFor="">
+                            Date of birth
+                        </label>
                         <Controller
                             control={control}
                             name="dateOfBirth"
@@ -218,7 +227,7 @@ const ChangePersonalInformation = () => {
                         </span>
                     </div>
 
-                    <div className="change-pass-word-form__btn-save">
+                    <div className="change-pass-word-form__btn-save flex justify-center">
                         <Button htmlType="submit">Save</Button>
                     </div>
                 </form>

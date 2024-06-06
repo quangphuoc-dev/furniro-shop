@@ -48,7 +48,7 @@ const PaymentTable = () => {
                             alt=""
                         />
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col w-[350px]">
                         <span>{`${cart.name} - Size: ${cart.size}`}</span>
                         <span>{`Color: ${cart.color}`}</span>
                     </div>
@@ -83,12 +83,12 @@ const PaymentTable = () => {
                 <div className="flex justify-center gap-4">
                     {/* Nút xóa toàn bộ giỏ hàng */}
                     <button
-                        className="bg-[#b88e2f] p-2 rounded-[20px] text-white hover:bg-[#ffffff] hover:text-[#b88e2f] hover:border-[#b88e2f] hover:border-[1px]"
+                        className="bg-[#b88e2f] p-2 rounded-[15px] text-white hover:bg-[#ffffff] hover:text-[#b88e2f] hover:border-[#b88e2f] hover:border-[1px]"
                         onClick={() => handleClearCarts()}
                     >
                         Clear
                     </button>
-                    <button className="bg-[#b88e2f] p-2 rounded-[20px] text-white hover:bg-[#ffffff] hover:text-[#b88e2f] hover:border-[#b88e2f] hover:border-[1px]">
+                    <button className="bg-[#b88e2f] p-2 rounded-[15px] text-white hover:bg-[#ffffff] hover:text-[#b88e2f] hover:border-[#b88e2f] hover:border-[1px]">
                         Update Cart
                     </button>
                 </div>

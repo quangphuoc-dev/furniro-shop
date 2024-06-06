@@ -48,7 +48,7 @@ const PurchaseHistory = () => {
             if (userInfo && userInfo.id === bill.userId) {
                 return (
                     <div>
-                        <div className="flex justify-center place-items-center gap-[350px]">
+                        <div className="flex justify-center place-items-center gap-[150px]">
                             <div className="purchase-history-table__code-purchase ">
                                 <p>{bill.orderNumber}</p>
                             </div>
@@ -58,7 +58,7 @@ const PurchaseHistory = () => {
                             <div className="purchase-history-table__subtotal-product ">
                                 {bill.fullName}
                             </div>
-                            <div className="purchase-history-table__bill">
+                            <div className="purchase-history-table__bill cursor-pointer">
                                 <p onClick={() => showModal(bill.id)}>
                                     Xem chi tiết đơn hàng
                                 </p>
@@ -75,16 +75,19 @@ const PurchaseHistory = () => {
             <div className="purchase-history">
                 <div className="purchase-history-table">
                     <div className="purchase-history-table__table-grp">
-                        <div className="purchase-history-table__shop-table">
+                        <div className="purchase-history-table__shop-table mx-10 my-10">
+                            <div className="flex justify-center my-5">
+                                <h3 className="text-[24px] font-[500]">Purchanse History</h3>
+                                
+                            </div>
                             <div className="purchase-history-table__thead">
-                                <div className="purchase-history-table__thead-tr flex justify-center gap-20">
+                                <div className="purchase-history-table__thead-tr flex justify-center gap-[150px]">
                                     <div className="purchase-history-table__th1">
                                         Order number
                                     </div>
                                     <div className="purchase-history-table__th3">
                                         Date
                                     </div>
-                                    `
                                     <div className="purchase-history-table__th4">
                                         Mr/Ms
                                     </div>

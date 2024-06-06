@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"; // Hook để điều hướng t
 import { ROUTES } from "../constants/routes"; // Các hằng số định tuyến của ứng dụng
 import PaymentTable from "../components/PaymentTable"; // Import component CardTable
 import QualityDefault from "../components/QualityDefault";
+import { formatNumber } from "../utils/formatNumber";
 
 const CartPage = () => {
     // Sử dụng hook useNavigate để điều hướng trang
@@ -14,26 +15,6 @@ const CartPage = () => {
     const { carts } = useSelector((state) => state.cart);
     // Lấy trạng thái đăng nhập từ Redux store
     const { isLogin } = useSelector((state) => state.user);
-
-    // Hàm định dạng số theo dạng có dấu chấm ngăn cách hàng nghìn
-    const formatNumber = (num) => {
-        let numString = "";
-        while (num > 0) {
-            let div = num % 1000;
-            num = Math.floor(num / 1000);
-            if (num !== 0) {
-                if (div < 10) {
-                    div = "00" + div;
-                } else if (div < 100) {
-                    div = "0" + div;
-                }
-                numString = "." + div + numString;
-            } else {
-                numString = div + numString;
-            }
-        }
-        return numString;
-    };
 
     // Hàm tính tổng tiền trong hóa đơn
     const getTotalMoneyInBill = () => {

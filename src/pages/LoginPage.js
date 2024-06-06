@@ -65,7 +65,7 @@ const LoginPage = () => {
                         </span>
                     </div>
                     {/* Form đăng nhập */}
-                    <div>
+                    <form onSubmit={handleSubmit(onValid)}>
                         <div className="block bg-[#ffffff] w-[528px] border-solid border-[#9f9f9f] border-2 rounded-[10px] text-[16px] my-5">
                             <Controller
                                 control={control}
@@ -106,15 +106,17 @@ const LoginPage = () => {
                                 </span>
                             )}
                         </div>
-                    </div>
-                    <div className="flex justify-center">
-                        <Button
-                            className="bg-[#b88e2f] text-[#ffffff] h-[55px] w-[237px] border-solid border-[#b88e2f] border-2 rounded-[10px] my-3"
-                            onClick={handleSubmit(onValid)} // Chỉnh sửa: sử dụng handleSubmit để xử lý sự kiện onClick
-                        >
-                            Login
-                        </Button>
-                    </div>
+                        <div className="flex justify-center">
+                            <Button
+                                className="bg-[#b88e2f] text-[#ffffff] h-[55px] w-[237px] border-solid border-[#b88e2f] border-2 rounded-[10px] my-3"
+                                // onClick={handleSubmit(onValid)} // Chỉnh sửa: sử dụng handleSubmit để xử lý sự kiện onClick
+                                htmlType="submit"
+                            >
+                                Login
+                            </Button>
+                        </div>
+                    </form>
+
                     <div className="flex gap-3 justify-end">
                         <p>Bạn chưa có tài khoản?</p>
                         <span

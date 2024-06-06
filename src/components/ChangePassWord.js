@@ -41,7 +41,10 @@ const ChangePassWord = () => {
     // Xử lý khi form được submit
     const onValid = (formValueChangePassword) => {
         // Kiểm tra mật khẩu hiện tại có đúng không
-        if (userInfo.password !== formValueChangePassword.currentPassword) {
+        if (
+            userInfo &&
+            userInfo.password !== formValueChangePassword.currentPassword
+        ) {
             return alert("Current password is incorrect!");
         } else {
             // Nếu đúng thì dispatch action để cập nhật mật khẩu mới
@@ -62,43 +65,41 @@ const ChangePassWord = () => {
 
     return (
         <div className="change-pass-word-wrapper">
-            <div className="change-pass-word-container">
-                <div className="change-pass-word-container__title flex justify-center">
-                    <h3>Change your password</h3>
+            <div className="change-pass-word-container mx-10 my-10">
+                <div className="change-pass-word-container__title flex justify-center my-5">
+                    <h3 className="text-[24px] font-[500]">
+                        Change your password
+                    </h3>
                 </div>
                 {/* Form nhập liệu để thay đổi mật khẩu */}
                 <Form
-                    className="change-pass-word-form flex flex-col items-center"
+                    className="change-pass-word-form flex flex-col gap-5"
                     onSubmitCapture={handleSubmit(onValid)}
                 >
                     {/* Input để nhập mật khẩu hiện tại */}
-                    <div className="change-pass-word-form__current-password">
+                    <div className="change-pass-word-form__current-password flex">
+                        <label className="w-[200px]" htmlFor="">
+                            Current password
+                        </label>
                         <Controller
                             control={control}
                             name="currentPassword"
                             render={({ field }) => {
-                                return (
-                                    <Input
-                                        placeholder="Current password..."
-                                        {...field}
-                                    />
-                                );
+                                return <Input {...field} />;
                             }}
                         />
                     </div>
 
                     {/* Input để nhập mật khẩu mới */}
-                    <div className="change-pass-word-form__new-password">
+                    <div className="change-pass-word-form__new-password flex">
+                        <label className="w-[200px]" htmlFor="">
+                            New password
+                        </label>
                         <Controller
                             control={control}
                             name="newPassword"
                             render={({ field }) => {
-                                return (
-                                    <Input
-                                        placeholder="New password..."
-                                        {...field}
-                                    />
-                                );
+                                return <Input {...field} />;
                             }}
                         />
                         {!!errors.newPassword?.message && (
@@ -109,17 +110,15 @@ const ChangePassWord = () => {
                     </div>
 
                     {/* Input để xác nhận mật khẩu mới */}
-                    <div className="change-pass-word-form__confirm-password">
+                    <div className="change-pass-word-form__confirm-password flex">
+                        <label className="w-[200px]" htmlFor="">
+                            Confirm password
+                        </label>
                         <Controller
                             control={control}
                             name="confirmPassword"
                             render={({ field }) => {
-                                return (
-                                    <Input
-                                        placeholder="Confirm password..."
-                                        {...field}
-                                    />
-                                );
+                                return <Input {...field} />;
                             }}
                         />
                         {!!errors.confirmPassword?.message && (
@@ -130,7 +129,7 @@ const ChangePassWord = () => {
                     </div>
 
                     {/* Button để lưu thay đổi */}
-                    <div className="change-pass-word-form__btn-save">
+                    <div className="change-pass-word-form__btn-save flex justify-center">
                         <Button htmlType="submit">Save</Button>
                     </div>
                 </Form>

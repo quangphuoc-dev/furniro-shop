@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actFetchAllCheckoutBills } from "../redux/features/checkoutSlice";
 import CartPurchase from "../components/CartPurchanse";
+import { Table } from "antd";
 
 // Component hiển thị lịch sử mua hàng của người dùng
 const PurchaseHistory = () => {
@@ -47,22 +48,23 @@ const PurchaseHistory = () => {
         return checkoutBills.map((bill) => {
             if (userInfo && userInfo.id === bill.userId) {
                 return (
-                    <div>
-                        <div className="flex justify-center place-items-center gap-[150px]">
-                            <div className="purchase-history-table__code-purchase ">
-                                <p>{bill.orderNumber}</p>
-                            </div>
-                            <div className="purchase-history-table__date-of-bill ">
-                                <p>{bill.dateOfBill}</p>
-                            </div>
-                            <div className="purchase-history-table__subtotal-product ">
-                                {bill.fullName}
-                            </div>
-                            <div className="purchase-history-table__bill cursor-pointer">
-                                <p onClick={() => showModal(bill.id)}>
-                                    Xem chi tiết đơn hàng
-                                </p>
-                            </div>
+                    <div
+                        key={bill.id}
+                        className="grid grid-cols-4 gap-4 p-4 border-b"
+                    >
+                        <div className="purchase-history-table__code-purchase text-center">
+                            <p>{bill.orderNumber}</p>
+                        </div>
+                        <div className="purchase-history-table__date-of-bill text-center">
+                            <p>{bill.dateOfBill}</p>
+                        </div>
+                        <div className="purchase-history-table__subtotal-product text-center">
+                            {bill.fullName}
+                        </div>
+                        <div className="purchase-history-table__bill cursor-pointer text-center text-[#3942df]">
+                            <p onClick={() => showModal(bill.id)}>
+                                Xem chi tiết đơn hàng
+                            </p>
                         </div>
                     </div>
                 );
@@ -73,41 +75,36 @@ const PurchaseHistory = () => {
     return (
         <div className="purchase-history-wrapper">
             <div className="purchase-history">
-                <div className="purchase-history-table">
-                    <div className="purchase-history-table__table-grp">
-                        <div className="purchase-history-table__shop-table mx-10 my-10">
-                            <div className="flex justify-center my-5">
-                                <h3 className="text-[24px] font-[500]">Purchanse History</h3>
-                                
-                            </div>
-                            <div className="purchase-history-table__thead">
-                                <div className="purchase-history-table__thead-tr flex justify-center gap-[150px]">
-                                    <div className="purchase-history-table__th1">
-                                        Order number
-                                    </div>
-                                    <div className="purchase-history-table__th3">
-                                        Date
-                                    </div>
-                                    <div className="purchase-history-table__th4">
-                                        Mr/Ms
-                                    </div>
-                                    <div className="purchase-history-table__th2">
-                                        Product
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="purchase-history-table__tbody">
-                                {/* Render danh sách đơn hàng */}
-                                {renderPurchaseList(checkoutBills)}
-                                {/* Hiển thị component CartPurchase để hiển thị thông tin chi tiết đơn hàng */}
-                                <CartPurchase
-                                    handleOk={handleOk}
-                                    handleCancel={handleCancel}
-                                    isModalOpen={isModalOpen}
-                                    cartsInCheckoutBills={cartsInCheckoutBills}
-                                />
-                            </div>
+                <div className="purchase-history-table mx-10 my-10">
+                    <div className="flex justify-center my-5">
+                        <h3 className="text-2xl font-medium">
+                            Purchase History
+                        </h3>
+                    </div>
+                    <div className="purchase-history-table__thead grid grid-cols-4 gap-4 border-b pb-2 mb-2">
+                        <div className="purchase-history-table__th1 text-center">
+                            Order number
                         </div>
+                        <div className="purchase-history-table__th3 text-center">
+                            Date
+                        </div>
+                        <div className="purchase-history-table__th4 text-center">
+                            Mr/Ms
+                        </div>
+                        <div className="purchase-history-table__th2 text-center">
+                            Product
+                        </div>
+                    </div>
+                    <div className="purchase-history-table__tbody">
+                        {/* Render danh sách đơn hàng */}
+                        {renderPurchaseList(checkoutBills)}
+                        {/* Hiển thị component CartPurchase để hiển thị thông tin chi tiết đơn hàng */}
+                        <CartPurchase
+                            handleOk={handleOk}
+                            handleCancel={handleCancel}
+                            isModalOpen={isModalOpen}
+                            cartsInCheckoutBills={cartsInCheckoutBills}
+                        />
                     </div>
                 </div>
             </div>

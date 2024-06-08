@@ -19,9 +19,9 @@ const PaymentTable = () => {
     // Hàm định dạng số theo dạng có dấu chấm ngăn cách hàng nghìn
 
     // Hàm xử lý khi thay đổi số lượng sản phẩm
-    const onChangeQuantity = (id, quantity) => {
+    const onChangeQuantity = (id,size, quantity) => {
         // Gửi action cập nhật số lượng sản phẩm tới Redux store
-        dispatch(actUpdateQuantityOfProduct({ id: id, quantity: quantity }));
+        dispatch(actUpdateQuantityOfProduct({ id: id,size, quantity: quantity }));
     };
 
     // Hàm xử lý khi xóa sản phẩm khỏi giỏ hàng
@@ -61,7 +61,7 @@ const PaymentTable = () => {
                             value={cart.quantity}
                             style={{ width: 62, borderRadius: 0 }}
                             onChange={(value) =>
-                                onChangeQuantity(cart.id, value)
+                                onChangeQuantity(cart.id,cart.size, value)
                             }
                         />
                     </div>

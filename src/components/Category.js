@@ -28,8 +28,8 @@ function Category() {
     }, []);
 
     // Hàm điều hướng tới trang danh sách sản phẩm theo brandId
-    const onViewProductsByBrandId = (brandId) => {
-        navigate(`/products?brandId=${brandId}`);
+    const onViewProductsByBrandName = (brandName) => {
+        navigate(`/products?brandName=${brandName}`);
     };
 
     return (
@@ -46,7 +46,7 @@ function Category() {
                             key={item.id}
                             className="hover:cursor-pointer hover:opacity-[0.5]"
                             onClick={() =>
-                                onViewProductsByBrandId(item.brandId)
+                                onViewProductsByBrandName(item.brandsName)
                             }
                         >
                             <img

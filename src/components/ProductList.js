@@ -1,81 +1,93 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Pagination, Row, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
     actFetchAllProducts,
     filterReducer,
     setNewPage,
+    deleteFilterReducer,
 } from "../redux/features/productSlice";
 import SpinFC from "antd/es/spin";
 import { globalNavigate } from "../utils/globalHistory"; // Import globalNavigate
 import { formatNumber } from "../utils/formatNumber";
+import { useLocation } from "react-router-dom";
 
 const ProductList = () => {
     const dispatch = useDispatch();
-    const { isLoading, products, pagination, searchKey, params } = useSelector(
-        (state) => state.product
-    );
+    const { isLoading, products, pagination, searchKey, filter, params } =
+        useSelector((state) => state.product);
+    const location = useLocation();
+    const [selectedValue, setSelectedValue] = useState("Lọc theo giá:");
+    const [selectedSort, setSelectedSort] = useState("Sắp xếp theo:");
 
     // Fetch danh sách sản phẩm khi component được render
     useEffect(() => {
+        const paramsInit = new URLSearchParams(location.search);
+        const brandName = paramsInit.get("brandName");
+
         dispatch(
             actFetchAllProducts({
-                _page: 1,
+                _page: pagination.currentPage ?? 1,
                 _limit: pagination.limitPerPage,
-                q: params.search,
+                q: params.search ?? brandName,
+                filter,
                 ...params,
             })
         );
-        return () => {
-            dispatch(setNewPage(1)); // Reset trang về 1 khi component unmount
-        };
         // eslint-disable-next-line
-    }, []);
+    }, [location, pagination.currentPage, filter]);
+
+    useEffect(() => {
+        // Làm sạch các giá trị filter ở đây
+        deleteFilterReducer();
+        setSelectedValue("Lọc theo giá:");
+        setSelectedSort("Sắp xếp theo:");
+    }, [location.search, location.pathname]);
 
     // Xử lý thay đổi trang
     const handleChangePage = (newPage) => {
         dispatch(setNewPage(newPage));
-        dispatch(
-            actFetchAllProducts({
-                _page: newPage,
-                _limit: pagination.limitPerPage,
-                q: searchKey,
-                ...params,
-            })
-        );
     };
 
-    // Fetch lại danh sách sản phẩm khi thay đổi từ khóa tìm kiếm
-    useEffect(() => {
-        dispatch(
-            actFetchAllProducts({
-                _page: 1,
-                _limit: pagination.limitPerPage,
-                q: searchKey,
-                ...params,
-            })
-        );
-        // eslint-disable-next-line
-    }, [searchKey]);
+    // // Fetch lại danh sách sản phẩm khi thay đổi từ khóa tìm kiếm
+    // useEffect(() => {
+    //     dispatch(
+    //         actFetchAllProducts({
+    //             _page: 1,
+    //             _limit: pagination.limitPerPage,
+    //             q: searchKey,
+    //             ...params,
+    //         })
+    //     );
+    //     // eslint-disable-next-line
+    // }, [searchKey]);
 
     // Xử lý thay đổi filter
     const handleFilterChange = async (valueFilter) => {
+        setSelectedValue(valueFilter);
         dispatch(filterReducer(valueFilter));
+        dispatch(setNewPage(1));
     };
 
-    // Fetch lại danh sách sản phẩm khi thay đổi filter
-    const { filter } = useSelector((state) => state.product);
-    useEffect(() => {
-        dispatch(
-            actFetchAllProducts({
-                _page: 1,
-                _limit: pagination.limitPerPage,
-                q: searchKey,
-                ...params,
-            })
-        );
-        // eslint-disable-next-line
-    }, [filter]);
+    const handleSortChange = async (valueFilter) => {
+        setSelectedSort(valueFilter);
+        dispatch(filterReducer(valueFilter));
+        dispatch(setNewPage(1));
+    };
+
+    // // Fetch lại danh sách sản phẩm khi thay đổi filter
+    // const { filter } = useSelector((state) => state.product);
+    // useEffect(() => {
+    //     dispatch(
+    //         actFetchAllProducts({
+    //             _page: 1,
+    //             _limit: pagination.limitPerPage,
+    //             q: searchKey,
+    //             ...params,
+    //         })
+    //     );
+    //     // eslint-disable-next-line
+    // }, [filter]);
 
     // Hiển thị loading khi đang fetch dữ liệu
     if (isLoading) {
@@ -138,40 +150,43 @@ const ProductList = () => {
             <div className="list-product__filter-grp h-[60px] bg-stone-300 flex items-center gap-2">
                 {/* Dropdown filter giá */}
                 <Select
-                    defaultValue="Lọc theo giá:"
+                    value={selectedValue}
                     style={{ width: 188 }}
                     onChange={handleFilterChange}
                     options={[
-                        { value: "dưới 1.500.000đ", label: "Dưới 1.500.000đ" },
                         {
-                            value: "1.500.000đ - 5.000.000đ",
-                            label: "1.500.000đ - 5.000.000đ",
+                            value: "less than 1.500.000đ",
+                            label: "Dưới 1.500.000đ",
                         },
                         {
-                            value: "5.000.000đ - 10.000.000đ",
-                            label: "5.000.000đ - 10.000.000đ",
+                            value: "1.500.000đ - 2.500.000đ",
+                            label: "1.500.000đ - 2.500.000đ",
                         },
                         {
-                            value: "trên 10.000.000đ",
-                            label: "Trên 10.000.000đ",
+                            value: "2.500.000đ - 3.500.000đ",
+                            label: "2.500.000đ - 3.500.000đ",
+                        },
+                        {
+                            value: "greater than 3.500.000đ",
+                            label: "Trên 3.500.000đ",
                         },
                     ]}
                 />
 
                 {/* Dropdown sắp xếp */}
                 <Select
-                    defaultValue="Sắp xếp theo:"
+                    value={selectedSort}
                     style={{ width: 150 }}
-                    onChange={handleFilterChange}
+                    onChange={handleSortChange}
                     options={[
-                        { value: "Tên: A-Z", label: "Tên: A-Z" },
-                        { value: "Tên: Z-A", label: "Tên: Z-A" },
+                        { value: "Name: A-Z", label: "Tên: A-Z" },
+                        { value: "Name: Z-A", label: "Tên: Z-A" },
                         {
-                            value: "Giá: Thấp đến cao",
+                            value: "Price: Low to High",
                             label: "Giá: Thấp đến cao",
                         },
                         {
-                            value: "Giá: Cao đến thấp",
+                            value: "Price: High to Low",
                             label: "Giá: Cao đến thấp",
                         },
                     ]}

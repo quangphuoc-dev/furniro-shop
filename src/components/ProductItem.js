@@ -32,6 +32,7 @@ import { actFetchUserById } from "../redux/features/userSlice";
 import dayjs from "dayjs";
 import { ROUTES } from "../constants/routes";
 import { formatNumber } from "../utils/formatNumber";
+import { globalNavigate } from "../utils/globalHistory"; // Import globalNavigate
 
 const schema = Yup.object().shape({
     size: Yup.string().required("Please choose size"),
@@ -95,6 +96,7 @@ const ProductItem = () => {
     }, [imgsProduct]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         dispatch(actFetchAllImgsProducts());
         dispatch(actFetchProductById(params.productId));
         dispatch(actFetchUserById(userInfo.id));
@@ -113,7 +115,7 @@ const ProductItem = () => {
         // );
         // dispatch(actFetchAllCommentsCalcuStarAverage(params));
         // eslint-disable-next-line
-    }, []);
+    }, [navigate]);
 
     useEffect(
         () => {
@@ -136,7 +138,29 @@ const ProductItem = () => {
         return parseFloat(params.productId) === product.id;
     });
     productsClone.splice(indexThisProduct, 1);
-    const relatedProductList = productsClone.slice(0, 4);
+
+    // Hàm shuffle mảng
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    // Lấy ngẫu nhiên 4 sản phẩm từ mảng productsClone
+    const getRandomProducts = (productsClone, count) => {
+        const shuffledProducts = shuffleArray([...productsClone]);
+        return shuffledProducts.slice(0, count);
+    };
+
+    // Sử dụng hàm để lấy ngẫu nhiên 4 sản phẩm
+    const relatedProductList = getRandomProducts(productsClone, 4);
+
+    const handleProductClick = (productId) => {
+        console.log("Clicked on product with ID:", productId);
+        navigate(`${ROUTES.PRODUCT_PAGE}/${productId}  `);
+    };
 
     const onValid = (formValueOrder) => {
         dispatch(
@@ -289,6 +313,10 @@ const ProductItem = () => {
                     lg={6}
                     xl={6}
                     className="flex flex-col items-center p-4 border border-gray-200 rounded-lg m-2 transition-transform transform hover:-translate-y-1 hover:shadow-md"
+                    onClick={() => {
+                        handleProductClick(product.id);
+                    }}
+                    key={product.id}
                 >
                     <img
                         className="w-full h-auto max-w-xs mb-3 rounded-lg"

@@ -17,7 +17,6 @@ const initialState = {
     params: {
         _sort: null,
         _order: null,
-        material: null,
         price_lte: null,
         price_gte: null,
     }, // Các tham số tìm kiếm và bộ lọc
@@ -27,7 +26,7 @@ const initialState = {
 // Hành động để lấy tất cả các sản phẩm từ server
 export const actFetchAllProducts = createAsyncThunk(
     "products/fetchAllProducts",
-    async (params = {}) => {
+    async (params) => {
         const response = await productApis.getAllProducts({
             ...params,
         });
@@ -112,20 +111,20 @@ const productSlice = createSlice({
                     state.params._sort = "price";
                     state.params._order = "asc";
                     break;
-                case "1.500.000đ - 5.000.000đ":
+                case "1.500.000đ - 2.500.000đ":
                     state.params.price_gte = 1500000;
-                    state.params.price_lte = 5000000;
+                    state.params.price_lte = 2500000;
                     state.params._sort = "price";
                     state.params._order = "asc";
                     break;
-                case "5.000.000đ - 10.000.000đ":
-                    state.params.price_gte = 5000000;
-                    state.params.price_lte = 10000000;
+                case "2.500.000đ - 3.500.000đ":
+                    state.params.price_gte = 2500000;
+                    state.params.price_lte = 35000000;
                     state.params._sort = "price";
                     state.params._order = "asc";
                     break;
-                case "greater than 10.000.000đ":
-                    state.params.price_gte = 10000000;
+                case "greater than 3.500.000đ":
+                    state.params.price_gte = 35000000;
                     state.params.price_lte = 9000000000000000;
                     state.params._sort = "price";
                     state.params._order = "asc";
@@ -141,7 +140,7 @@ const productSlice = createSlice({
             }
         },
         // Xóa bộ lọc
-        deleteFilterReducer: (state, action) => {
+        deleteFilterReducer: (state) => {
             state.params = {
                 _sort: null,
                 _order: null,

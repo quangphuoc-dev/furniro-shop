@@ -58,9 +58,9 @@ const cartSlice = createSlice({
 
         // Hành động để cập nhật số lượng sản phẩm trong giỏ hàng
         actUpdateQuantityOfProduct: (state, action) => {
-            const { id, quantity } = action.payload;
+            const { id, size, quantity } = action.payload;
             const existedItemIndex = state.carts.findIndex(
-                (item) => item.id === id
+                (item) => item.id === id && item.size === size
             );
             state.carts[existedItemIndex].quantity = quantity;
             localStorage.setItem(KEY_CARTS_LIST, JSON.stringify(state.carts));

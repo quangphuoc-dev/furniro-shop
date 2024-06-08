@@ -20,6 +20,7 @@ import {
     actFetchAllProducts,
     setNewPage,
     setSearchKey,
+    deleteFilterReducer,
 } from "../redux/features/productSlice";
 import axios from "axios";
 import { globalNavigate } from "../utils/globalHistory"; // Import globalNavigate
@@ -210,8 +211,10 @@ function Header() {
         e.preventDefault(); // Ngăn chặn hành động mặc định của sự kiện (ví dụ: gửi form)
         e.stopPropagation();
 
+        setSearchProductsResult([]);
+
         if (!searchKey) {
-            setSearchProductsResult([]);
+            options = [];
             return;
         }
 
@@ -225,52 +228,34 @@ function Header() {
         );
 
         if (data) {
+            options = [];
+            setSearchProductsResult([]);
             setSearchProductsResult(data);
+            console.log(searchProductsResult);
         }
     };
 
     // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại nhẫn
     const handleFilterAdidasProduct = () => {
         dispatch(setSearchKey("Adidas")); // Đặt từ khóa tìm kiếm là "Adidas"
-        dispatch(
-            actFetchAllProducts({
-                _page: 1, // Đặt trang hiện tại về 1
-                _limit: pagination.limitPerPage, // Giới hạn số lượng sản phẩm trên mỗi trang
-                q: searchKey, // Từ khóa tìm kiếm (là "Adidas" trong trường hợp này)
-                ...params, // Giữ lại các tham số lọc hiện tại khác
-            })
-        );
-        navigate(ROUTES.PRODUCT_PAGE); // Điều hướng người dùng đến trang sản phẩm
+        dispatch(deleteFilterReducer());
+        navigate(`${ROUTES.PRODUCT_PAGE}?brandName=Adidas`); // Điều hướng người dùng đến trang sản phẩm
         setIsToggle(!isToggle); // Đảo ngược trạng thái của thanh điều hướng (mở hoặc đóng)
     };
 
     // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại nhẫn
     const handleFilterNikeProduct = () => {
         dispatch(setSearchKey("Nike")); // Đặt từ khóa tìm kiếm là "Nike"
-        dispatch(
-            actFetchAllProducts({
-                _page: 1, // Đặt trang hiện tại về 1
-                _limit: pagination.limitPerPage, // Giới hạn số lượng sản phẩm trên mỗi trang
-                q: searchKey, // Từ khóa tìm kiếm (là "Nike" trong trường hợp này)
-                ...params, // Giữ lại các tham số lọc hiện tại khác
-            })
-        );
-        navigate(ROUTES.PRODUCT_PAGE); // Điều hướng người dùng đến trang sản phẩm
+        dispatch(deleteFilterReducer());
+        navigate(`${ROUTES.PRODUCT_PAGE}?brandName=Nike`);
         setIsToggle(!isToggle); // Đảo ngược trạng thái của thanh điều hướng (mở hoặc đóng)
     };
 
     // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại nhẫn
     const handleFilterMlbProduct = () => {
         dispatch(setSearchKey("MLB")); // Đặt từ khóa tìm kiếm là "MLB"
-        dispatch(
-            actFetchAllProducts({
-                _page: 1, // Đặt trang hiện tại về 1
-                _limit: pagination.limitPerPage, // Giới hạn số lượng sản phẩm trên mỗi trang
-                q: searchKey, // Từ khóa tìm kiếm (là "MLB" trong trường hợp này)
-                ...params, // Giữ lại các tham số lọc hiện tại khác
-            })
-        );
-        navigate(ROUTES.PRODUCT_PAGE); // Điều hướng người dùng đến trang sản phẩm
+        dispatch(deleteFilterReducer());
+        navigate(`${ROUTES.PRODUCT_PAGE}?brandName=MLB`);
         setIsToggle(!isToggle); // Đảo ngược trạng thái của thanh điều hướng (mở hoặc đóng)
     };
 
@@ -283,7 +268,8 @@ function Header() {
     };
 
     const handleProductClick = (productId) => {
-        globalNavigate(`/products/${productId}`); // Sử dụng globalNavigate để điều hướng đến trang detailProduct
+        options = [];
+        navigate(`${ROUTES.PRODUCT_PAGE}/${productId}`);
     };
 
     const [isDrawerOpen, setOpen] = useState(false);
@@ -294,11 +280,11 @@ function Header() {
         setOpen(false);
     };
 
-    const options = searchProductsResult.map((_product) => ({
+    let options = searchProductsResult.map((_product) => ({
         value: _product.name,
         label: (
             <div
-                key={_product.id}
+                key={_product}
                 onClick={() => handleProductClick(_product.id)}
                 className="flex gap-2 my-1"
             >
@@ -312,13 +298,16 @@ function Header() {
         ),
     }));
 
-    console.log(searchProductsResult, "searchProductsResult");
+    // console.log(searchProductsResult, "searchProductsResult");
 
     return (
         <header className="bg-stone-300	 h-[100px] flex flex-row items-center px-10">
+            <div className="header-btn-show-navBar">
+                <MenuOutlined onClick={handleToggleNavBar} />
+            </div>
             <div className="header-logo basis-1/4 px-10 flex">
                 <Link to={ROUTES.HOME_PAGE}>
-                    <img className="m-auto" src={Logo} />
+                    <img className="m-auto" src={Logo} alt="logo" />
                 </Link>
             </div>
             <div className="header-menu basis-2/4 px-10 text-center">

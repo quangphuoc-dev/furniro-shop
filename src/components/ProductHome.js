@@ -157,7 +157,7 @@ const ProductHome = () => {
                 </span>
             </div>
             {/* Danh sách sản phẩm */}
-            <div className="product-items inline-grid grid-cols-4 gap-[32px] py-[55px] px-[100px]">
+            <div className="product-items inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[32px] py-[55px] px-[100px]">
                 {renderProducts(products)}
             </div>
             <div className="product-btn text-[16px] font-[600] border-solid border-[1px] border-[#b88e2f] w-[245px] h-[48px] flex m-auto justify-center items-center mt-[32px] hover:bg-[#b88e2f] hover:text-[#ffffff]">

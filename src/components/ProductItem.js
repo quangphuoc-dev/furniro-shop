@@ -9,7 +9,11 @@ import {
     Row,
     Select,
 } from "antd";
-import { CarOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import {
+    CarOutlined,
+    SafetyCertificateOutlined,
+    UserOutlined,
+} from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import {
     actFetchAllImgsProducts,
@@ -278,11 +282,15 @@ const ProductItem = () => {
                     className="detail-product-card-comment__review--item"
                 >
                     <div className="detail-product-card-comment__review--avatar-user">
-                        <img
-                            className="w-[30px] h-[30px]"
-                            src={comment?.avatarURL}
-                            alt=""
-                        />
+                        {comment?.avatarURL ? (
+                            <img
+                                className="w-[30px] h-[30px]"
+                                src={comment.avatarURL}
+                                alt="avatar"
+                            />
+                        ) : (
+                            <UserOutlined className="w-[30px] h-[30px]" />
+                        )}
                     </div>
                     <div className="detail-product-card-comment__review--grp-right">
                         <div className="detail-product-card-comment__review--user-name">
@@ -307,11 +315,6 @@ const ProductItem = () => {
         return relatedProductList.map((product) => {
             return (
                 <Col
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={6}
-                    xl={6}
                     className="flex flex-col items-center p-4 border border-gray-200 rounded-lg m-2 transition-transform transform hover:-translate-y-1 hover:shadow-md"
                     onClick={() => {
                         handleProductClick(product.id);
@@ -598,11 +601,11 @@ const ProductItem = () => {
             onChange={handleChangePage}
           />
         </div> */}
-                <div className="mt-8">
+                <div className="mt-8 flex flex-col">
                     <h3 className="text-xl font-bold mb-4 flex justify-center text-[30px]">
                         Related products
                     </h3>
-                    <div className="gap-4 flex justify-center">
+                    <div className="inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
                         {renderRelatedProductList(relatedProductList)}
                     </div>
                 </div>

@@ -40,7 +40,7 @@ function Category() {
                 </span>
             </div>
             <div>
-                <div className="content-category flex flex-row items-center justify-center gap-[24px]">
+                <div className="content-category flex flex-col sm:flex-row md:flex-row items-center justify-center gap-[24px]">
                     {brandsWithOneProduct.map((item) => (
                         <div
                             key={item.id}

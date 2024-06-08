@@ -24,7 +24,7 @@ function ProductPage() {
                         <span>
                             <RightOutlined />
                         </span>
-                        Shop
+                        Products
                     </p>
                 </div>
             </div>

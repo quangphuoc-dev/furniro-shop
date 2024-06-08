@@ -42,7 +42,7 @@ const ProfileNav = () => {
                         <ul className="profile-nav__list-information flex flex-col px-5 rounded-[10px] bg-[#fff3e3] py-3 ">
                             {/* Tùy chọn thay đổi hồ sơ */}
                             <li
-                                className="profile-nav__list-information--change-profile basis-1/3    text-[#b88e2f] py-1 px-4 cursor-pointer hover:bg-[#b88e2f] hover:text-[#ffffff] active:bg-[#b88e2f] active:text-[#ffffff] focus:bg-black"
+                                className="profile-nav__list-information--change-profile basis-1/3    text-[#b88e2f] py-1 px-4 cursor-pointer hover:bg-[#b88e2f] hover:text-[#ffffff] "
                                 onClick={() => {
                                     navigate(ROUTES.USER_PROFILE_PAGE);
                                 }}
@@ -51,7 +51,7 @@ const ProfileNav = () => {
                             </li>
                             {/* Tùy chọn thay đổi mật khẩu */}
                             <li
-                                className="profile-nav__list-information--change-password basis-1/3   text-[#b88e2f] py-1 px-4 cursor-pointer hover:bg-[#b88e2f] hover:text-[#ffffff] active:bg-[#b88e2f] active:text-[#ffffff]"
+                                className="profile-nav__list-information--change-password basis-1/3   text-[#b88e2f] py-1 px-4 cursor-pointer hover:bg-[#b88e2f] hover:text-[#ffffff]"
                                 onClick={() => {
                                     navigate(ROUTES.USER_PASSWORD_PAGE);
                                 }}
@@ -60,7 +60,7 @@ const ProfileNav = () => {
                             </li>
                             {/* Tùy chọn xem lịch sử mua hàng */}
                             <li
-                                className="profile-nav__list-information--purchase-history basis-1/3  text-[#b88e2f] py-1 px-4 cursor-pointer hover:bg-[#b88e2f] hover:text-[#ffffff] active:bg-[#b88e2f] active:text-[#ffffff]"
+                                className="profile-nav__list-information--purchase-history basis-1/3  text-[#b88e2f] py-1 px-4 cursor-pointer hover:bg-[#b88e2f] hover:text-[#ffffff]"
                                 onClick={() => {
                                     navigate(ROUTES.USER_PURCHASE_HISTORY_PAGE);
                                 }}

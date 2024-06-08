@@ -2,11 +2,9 @@ import Logo from "../assets/images/header-logo.png";
 import { AutoComplete } from "antd";
 import Cart from "./Cart";
 import {
-    CloseOutlined,
     DownOutlined,
     MenuOutlined,
     SearchOutlined,
-    ShoppingOutlined,
     UserOutlined,
     ShoppingCartOutlined,
 } from "@ant-design/icons";
@@ -17,8 +15,6 @@ import { ROUTES } from "../constants/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/features/userSlice";
 import {
-    actFetchAllProducts,
-    setNewPage,
     setSearchKey,
     deleteFilterReducer,
 } from "../redux/features/productSlice";
@@ -61,15 +57,15 @@ function Header() {
     // Khởi tạo state isToggle với giá trị mặc định là false và hàm setIsToggle để cập nhật giá trị của nó
     const [isToggle, setIsToggle] = useState(false);
 
-    // Khởi tạo state isShowSubNavProductMobile với giá trị mặc định là false và hàm setIsShowSubNavProductMobile để cập nhật giá trị của nó
-    const [isShowSubNavProductMobile, setIsShowSubNavProductMobile] =
-        useState(false);
+    // // Khởi tạo state isShowSubNavProductMobile với giá trị mặc định là false và hàm setIsShowSubNavProductMobile để cập nhật giá trị của nó
+    // const [isShowSubNavProductMobile, setIsShowSubNavProductMobile] =
+    //     useState(false);
 
-    // Khởi tạo state isShowSubNavGiftMobile với giá trị mặc định là false và hàm setIsShowSubNavGiftMobile để cập nhật giá trị của nó
-    const [isShowSubNavGiftMobile, setIsShowSubNavGiftMobile] = useState(false);
+    // // Khởi tạo state isShowSubNavGiftMobile với giá trị mặc định là false và hàm setIsShowSubNavGiftMobile để cập nhật giá trị của nó
+    // const [isShowSubNavGiftMobile, setIsShowSubNavGiftMobile] = useState(false);
 
-    // Khởi tạo state isShowSubNavBlogMobile với giá trị mặc định là false và hàm setIsShowSubNavBlogMobile để cập nhật giá trị của nó
-    const [isShowSubNavBlogMobile, setIsShowSubNavBlogMobile] = useState(false);
+    // // Khởi tạo state isShowSubNavBlogMobile với giá trị mặc định là false và hàm setIsShowSubNavBlogMobile để cập nhật giá trị của nó
+    // const [isShowSubNavBlogMobile, setIsShowSubNavBlogMobile] = useState(false);
 
     // Mảng items chứa các đối tượng dùng để hiển thị các liên kết và chia cách trong menu cho người dùng chưa đăng nhập
     const items = [
@@ -134,37 +130,37 @@ function Header() {
         {
             key: "1",
             label: (
-                <a
+                <p
                     onClick={() => {
                         handleFilterAdidasProduct();
                     }}
                 >
                     Adidas
-                </a>
+                </p>
             ),
         },
         {
             key: "1",
             label: (
-                <a
+                <p
                     onClick={() => {
                         handleFilterNikeProduct();
                     }}
                 >
                     Nike
-                </a>
+                </p>
             ),
         },
         {
             key: "1",
             label: (
-                <a
+                <p
                     onClick={() => {
                         handleFilterMlbProduct();
                     }}
                 >
                     MLB
-                </a>
+                </p>
             ),
         },
     ];
@@ -176,35 +172,35 @@ function Header() {
         setIsToggle(!isToggle);
     };
 
-    // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con sản phẩm trên di động
-    const handleToggleSubNavProductMobile = () => {
-        // Đảo ngược giá trị của isShowSubNavProductMobile để mở hoặc đóng menu con sản phẩm
-        setIsShowSubNavProductMobile(!isShowSubNavProductMobile);
-    };
+    // // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con sản phẩm trên di động
+    // const handleToggleSubNavProductMobile = () => {
+    //     // Đảo ngược giá trị của isShowSubNavProductMobile để mở hoặc đóng menu con sản phẩm
+    //     setIsShowSubNavProductMobile(!isShowSubNavProductMobile);
+    // };
 
-    // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con quà tặng trên di động
-    const handleToggleSubNavGiftMobile = () => {
-        // Đảo ngược giá trị của isShowSubNavGiftMobile để mở hoặc đóng menu con quà tặng
-        setIsShowSubNavGiftMobile(!isShowSubNavGiftMobile);
-    };
+    // // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con quà tặng trên di động
+    // const handleToggleSubNavGiftMobile = () => {
+    //     // Đảo ngược giá trị của isShowSubNavGiftMobile để mở hoặc đóng menu con quà tặng
+    //     setIsShowSubNavGiftMobile(!isShowSubNavGiftMobile);
+    // };
 
-    // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con blog trên di động
-    const handleToggleSubNavBlogMobile = () => {
-        // Đảo ngược giá trị của isShowSubNavBlogMobile để mở hoặc đóng menu con blog
-        setIsShowSubNavBlogMobile(!isShowSubNavBlogMobile);
-    };
+    // // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con blog trên di động
+    // const handleToggleSubNavBlogMobile = () => {
+    //     // Đảo ngược giá trị của isShowSubNavBlogMobile để mở hoặc đóng menu con blog
+    //     setIsShowSubNavBlogMobile(!isShowSubNavBlogMobile);
+    // };
 
-    // Hàm xử lý sự kiện điều hướng người dùng về trang chủ
-    const handleRedirectToHomePage = () => {
-        // Điều hướng người dùng đến trang chủ
-        navigate(ROUTES.HOME_PAGE);
-    };
+    // // Hàm xử lý sự kiện điều hướng người dùng về trang chủ
+    // const handleRedirectToHomePage = () => {
+    //     // Điều hướng người dùng đến trang chủ
+    //     navigate(ROUTES.HOME_PAGE);
+    // };
 
-    // Hàm xử lý sự kiện điều hướng người dùng về trang giỏ hàng
-    const handleRedirectToCartPage = () => {
-        // Điều hướng người dùng đến trang giỏ hàng
-        navigate(ROUTES.PAYMENT_PAGE);
-    };
+    // // Hàm xử lý sự kiện điều hướng người dùng về trang giỏ hàng
+    // const handleRedirectToCartPage = () => {
+    //     // Điều hướng người dùng đến trang giỏ hàng
+    //     navigate(ROUTES.PAYMENT_PAGE);
+    // };
 
     // Hàm xử lý sự kiện khi người dùng tìm kiếm sản phẩm
     const handleSearchProduct = async (e) => {
@@ -235,7 +231,7 @@ function Header() {
         }
     };
 
-    // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại nhẫn
+    // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại giày
     const handleFilterAdidasProduct = () => {
         dispatch(setSearchKey("Adidas")); // Đặt từ khóa tìm kiếm là "Adidas"
         dispatch(deleteFilterReducer());
@@ -243,7 +239,7 @@ function Header() {
         setIsToggle(!isToggle); // Đảo ngược trạng thái của thanh điều hướng (mở hoặc đóng)
     };
 
-    // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại nhẫn
+    // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại giày
     const handleFilterNikeProduct = () => {
         dispatch(setSearchKey("Nike")); // Đặt từ khóa tìm kiếm là "Nike"
         dispatch(deleteFilterReducer());
@@ -251,7 +247,7 @@ function Header() {
         setIsToggle(!isToggle); // Đảo ngược trạng thái của thanh điều hướng (mở hoặc đóng)
     };
 
-    // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại nhẫn
+    // Hàm xử lý sự kiện khi người dùng lọc sản phẩm theo loại giày
     const handleFilterMlbProduct = () => {
         dispatch(setSearchKey("MLB")); // Đặt từ khóa tìm kiếm là "MLB"
         dispatch(deleteFilterReducer());
@@ -273,6 +269,15 @@ function Header() {
     };
 
     const [isDrawerOpen, setOpen] = useState(false);
+    const [openDrawerCategory, setOpenDrawerCategory] = useState(false);
+
+    const showDrawerCategory = () => {
+        setOpenDrawerCategory(true);
+    };
+    const onCloseDrawerCategory = () => {
+        setOpenDrawerCategory(false);
+    };
+
     const showDrawer = () => {
         setOpen(true);
     };
@@ -301,17 +306,68 @@ function Header() {
     // console.log(searchProductsResult, "searchProductsResult");
 
     return (
-        <header className="bg-stone-300	 h-[100px] flex flex-row items-center px-10">
-            <div className="header-btn-show-navBar">
-                <MenuOutlined onClick={handleToggleNavBar} />
+        <header className="bg-stone-300	 h-[100px] flex flex-row justify-between items-center px-1 sm:px-3 md:px-5 lg:px-10 sm:gap-5 md:gap-5">
+            <div className="lg:hidden header-btn-show-navBar p-3">
+                <MenuOutlined onClick={showDrawerCategory} />
             </div>
-            <div className="header-logo basis-1/4 px-10 flex">
+            <Drawer
+                className="lg:hidden"
+                placement="left"
+                title="Menu"
+                onClose={onCloseDrawerCategory}
+                open={openDrawerCategory}
+            >
+                <ul className="menu-item grid grid-col-4 justify-center items-center gap-[50px]">
+                    <li className="cursor-pointer">
+                        <Link to={ROUTES.HOME_PAGE}>Home</Link>
+                    </li>
+                    <li>
+                        <Dropdown overlay={menu} trigger={["hover"]}>
+                            <Space>
+                                <Link to={ROUTES.PRODUCT_PAGE}>Product</Link>
+                                <DownOutlined />
+                            </Space>
+                        </Dropdown>
+                    </li>
+                    <li>
+                        <Link to={ROUTES.BLOG_PAGE}>Blog</Link>
+                    </li>
+                    <li>
+                        <Link to={ROUTES.CONTACT_PAGE}>Contact</Link>
+                    </li>
+                </ul>
+                <div>
+                    <form onSubmit={handleSearchProduct} className="">
+                        <div className="flex justify-center gap-5 my-10 rounded-lg">
+                            <AutoComplete
+                                style={{ width: 150 }}
+                                options={options}
+                                filterOption={false}
+                                dropdownMatchSelectWidth={252}
+                            >
+                                <Input
+                                    className=""
+                                    placeholder="Search product..."
+                                    value={searchKey}
+                                    onChange={handleChangeInputSearch}
+                                    onPressEnter={handleSearchProduct}
+                                />
+                            </AutoComplete>
+                            <SearchOutlined
+                                className=" text-gray-600 cursor-pointer"
+                                onClick={handleProductClick}
+                            />
+                        </div>
+                    </form>
+                </div>
+            </Drawer>
+            <div className="header-logo lg:px-10 flex">
                 <Link to={ROUTES.HOME_PAGE}>
                     <img className="m-auto" src={Logo} alt="logo" />
                 </Link>
             </div>
-            <div className="header-menu basis-2/4 px-10 text-center">
-                <ul className="menu-item grid grid-cols-4">
+            <div className="header-menu hidden lg:inline-block px-1 sm:px-3 md:px-5 lg:px-10 text-center">
+                <ul className="menu-item grid grid-cols-4 gap-[50px]">
                     <li className="cursor-pointer">
                         <Link to={ROUTES.HOME_PAGE}>Home</Link>
                     </li>
@@ -331,9 +387,9 @@ function Header() {
                     </li>
                 </ul>
             </div>
-            <div className="header-icon basis-1/4 px-10  text-center">
+            <div className="header-icon px-1 sm:px-3 md:px-5 lg:px-10  text-center">
                 <ul className="icon-item flex items-center gap-8">
-                    <li className="flex justify-center gap-2">
+                    <li className=" hidden md:flex lg:flex justify-center gap-2">
                         <form
                             onSubmit={handleSearchProduct}
                             className="flex items-center"
@@ -414,7 +470,7 @@ function Header() {
                                         )}
                                     </Dropdown>
                                 </div>
-                                <div className="header-left__user-name text-[#b88e2f] font-bold">
+                                <div className="header-left__user-name text-[#b88e2f] font-bold hidden sm:block md:block">
                                     <p>{userInfo?.user}</p>
                                 </div>
                             </div>

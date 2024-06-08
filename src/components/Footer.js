@@ -3,10 +3,10 @@ import { ROUTES } from "../constants/routes";
 
 function Footer() {
     return (
-        <footer className="px-[100px] py-[40px] border-t-4">
+        <footer className="px-[10px] sm:px-[30px] md:px-[50px] lg:px-[100px] py-[10px] sm:py-[20px] md:py-[30px] lg:py-[40px] border-t-4">
             <div className="flex flex-col text-left">
                 <div className="basis-1/3 my-5">
-                    <div className="grid grid-cols-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
                         <div className="">
                             <a
                                 href={ROUTES.HOME_PAGE}
@@ -21,7 +21,7 @@ function Footer() {
                                 FL 33134 USA
                             </p>
                         </div>
-                        <div>
+                        <div className="hidden md:block">
                             <a
                                 href={ROUTES.HOME_PAGE}
                                 className="font-[500] text-[16px] text-[#9f9f9f] block mb-[32px] "
@@ -47,7 +47,7 @@ function Footer() {
                                 </li>
                             </ul>
                         </div>
-                        <div>
+                        <div className="hidden md:block">
                             <a
                                 href={ROUTES.HOME_PAGE}
                                 className="font-[500] text-[16px] text-[#9f9f9f] block mb-[32px]"

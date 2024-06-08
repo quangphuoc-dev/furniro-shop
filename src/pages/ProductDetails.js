@@ -1,6 +1,5 @@
 import ProductItem from "../components/ProductItem";
 import ProductInfo from "../components/ProductInfo";
-import ProductRelated from "../components/ProductRelated";
 import { useEffect } from "react";
 
 function ProductDetails() {
@@ -12,7 +11,6 @@ function ProductDetails() {
         <div>
             <ProductItem />
             {/* <ProductInfo /> */}
-            {/* <ProductRelated /> */}
         </div>
     );
 }

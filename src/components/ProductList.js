@@ -194,7 +194,7 @@ const ProductList = () => {
             </div>
 
             {/* Danh sách sản phẩm */}
-            <div className="product-items inline-grid grid-cols-4 gap-[32px] py-[55px] px-[100px]">
+            <div className="product-items inline-grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[32px] py-[55px] px-[100px]">
                 {renderProducts(products)}
             </div>
 

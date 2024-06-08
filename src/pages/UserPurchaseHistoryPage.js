@@ -6,7 +6,7 @@ import PurchaseHistory from "../components/PurchanseHistory";
 const UserPurchaseHistoryPage = () => {
     return (
         <div className="user-profile-wrapper w-[100vw] flex justify-center my-[50px]">
-            <div className="user-profile-container flex justify-around gap-5 w-[100vw] max-w-[1200px]">
+            <div className="user-profile-container flex lg:flex-row md:flex-row flex-col justify-around gap-5 w-[100vw] max-w-[1200px]">
                 {/* Phần menu điều hướng */}
                 <div className="user-profile-profile-nav flex justify-center">
                     <ProfileNav />

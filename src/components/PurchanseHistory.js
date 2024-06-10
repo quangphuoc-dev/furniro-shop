@@ -2,44 +2,53 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actFetchAllCheckoutBills } from "../redux/features/checkoutSlice";
 import CartPurchase from "../components/CartPurchanse";
-import { Table } from "antd";
 
 // Component hiển thị lịch sử mua hàng của người dùng
 const PurchaseHistory = () => {
+    // Khởi tạo dispatch để gọi các hành động Redux
     const dispatch = useDispatch();
+
+    // Lấy thông tin các đơn hàng từ Redux store
     const { checkoutBills } = useSelector((state) => state.checkout);
+
+    // State để lưu thông tin giỏ hàng trong đơn hàng khi hiển thị modal
     const [cartsInCheckoutBills, setCartsInCheckoutBills] = useState([]);
+
+    // State để kiểm soát trạng thái mở/đóng của modal
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Lấy thông tin người dùng từ Redux store
     const { userInfo } = useSelector((state) => state.user);
 
     // Sao chép mảng checkoutBills để tránh thay đổi trực tiếp trên state
     const checkoutBillsClone = [...checkoutBills];
 
-    // Mở modal hiển thị chi tiết đơn hàng khi người dùng nhấn xem chi tiết
+    // Hàm mở modal hiển thị chi tiết đơn hàng khi người dùng nhấn xem chi tiết
     const showModal = (id) => {
-        setIsModalOpen(true);
+        setIsModalOpen(true); // Đặt trạng thái mở modal
 
         // Tìm index của đơn hàng trong mảng checkoutBills
         const indexThisBills = checkoutBillsClone.findIndex((bill) => {
-            return bill.id === id;
+            return bill.id === id; // So sánh id của đơn hàng với id được truyền vào
         });
-        // Lấy thông tin giỏ hàng trong đơn hàng và set state
+
+        // Lấy thông tin giỏ hàng trong đơn hàng và đặt vào state cartsInCheckoutBills
         setCartsInCheckoutBills(checkoutBills[indexThisBills].carts);
     };
 
-    // Đóng modal
+    // Hàm đóng modal khi người dùng nhấn nút OK
     const handleOk = () => {
-        setIsModalOpen(false);
+        setIsModalOpen(false); // Đặt trạng thái đóng modal
     };
 
-    // Đóng modal khi click nút hủy
+    // Hàm đóng modal khi người dùng nhấn nút hủy
     const handleCancel = () => {
-        setIsModalOpen(false);
+        setIsModalOpen(false); // Đặt trạng thái đóng modal
     };
 
-    // Khi component được render, fetch danh sách đơn hàng
+    // useEffect để fetch danh sách đơn hàng khi component được render lần đầu
     useEffect(() => {
-        dispatch(actFetchAllCheckoutBills());
+        dispatch(actFetchAllCheckoutBills()); // Gọi hành động fetch tất cả các đơn hàng
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -69,6 +78,7 @@ const PurchaseHistory = () => {
                     </div>
                 );
             }
+            return null;
         });
     };
 

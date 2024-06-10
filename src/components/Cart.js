@@ -1,4 +1,4 @@
-import { Input, InputNumber, Button } from "antd";
+import { InputNumber } from "antd";
 import { useNavigate } from "react-router-dom";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,34 +11,46 @@ import {
 import { ROUTES } from "../constants/routes";
 import { formatNumber } from "../utils/formatNumber";
 
+// Component Cart nhận props closeDrawer
 const Cart = ({ closeDrawer }) => {
+    // Lấy hàm dispatch từ Redux để dispatch các action
     const dispatch = useDispatch();
+    // Lấy hàm navigate từ React Router để điều hướng giữa các trang
     const navigate = useNavigate();
+    // Lấy danh sách sản phẩm trong giỏ hàng từ Redux store
     const { carts } = useSelector((state) => state.cart);
 
     // Hàm xử lý sự kiện thay đổi số lượng sản phẩm trong giỏ hàng
     const onChangeQuantity = (id, size, quantity) => {
+        // Dispatch action để cập nhật số lượng sản phẩm trong giỏ hàng
         dispatch(actUpdateQuantityOfProduct({ id, size, quantity }));
+
         console.log({ id, size, quantity });
     };
 
     // Hàm xử lý sự kiện xóa sản phẩm trong giỏ hàng
     const handleDeleteProductInCarts = (productId) => {
+        // Dispatch action để xóa sản phẩm khỏi giỏ hàng
         dispatch(actDeleteProductInCarts(productId));
     };
 
     // Hàm xử lý sự kiện xóa toàn bộ sản phẩm trong giỏ hàng
     const handleClearCarts = () => {
+        // Dispatch action để xóa toàn bộ sản phẩm khỏi giỏ hàng
         dispatch(actClearCarts());
     };
 
-    const handlePayment = () => {
+    // Hàm xử lý sự kiện điều hướng đến trang giỏ hàng
+    const handleCart = () => {
+        // Đóng Drawer (ngăn kéo)
         closeDrawer();
-        navigate(ROUTES.PAYMENT_PAGE);
+        // Điều hướng đến trang giỏ hàng
+        navigate(ROUTES.CART_PAGE);
     };
 
     // Hàm render danh sách sản phẩm trong giỏ hàng
     const renderCartsList = (carts) => {
+        console.log(carts);
         return carts.map((cart) => {
             return (
                 <div>
@@ -110,7 +122,7 @@ const Cart = ({ closeDrawer }) => {
                     </button>
                     <button
                         className="h-[30px] w-[118px] rounded-[50px] border-solid border-[1px] border-[#000000] text-[12px] text-[#000000] font-[400] "
-                        onClick={() => handlePayment()}
+                        onClick={() => handleCart()}
                     >
                         View Cart
                     </button>

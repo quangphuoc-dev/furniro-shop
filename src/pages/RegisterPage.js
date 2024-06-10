@@ -20,30 +20,40 @@ const RegisterPage = () => {
 
     // Biểu thức chính quy để kiểm tra số điện thoại
     const phoneValidation = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+
     // Biểu thức chính quy để kiểm tra định dạng email
     const emailValidation =
         /^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$/;
 
     // Định nghĩa schema validation sử dụng Yup
     const schema = Yup.object().shape({
+        // Yêu cầu tên đầy đủ
         fullName: Yup.string().required("Please input your full name"),
+        // Yêu cầu tuổi, phải là số nguyên dương
         age: Yup.number()
             .positive()
             .integer()
             .required("Please input your age"),
+        // Yêu cầu giới tính
         gender: Yup.string().required("Please input your gender"),
+        // Yêu cầu tên người dùng
         user: Yup.string().required("Please input your user"),
+        // Yêu cầu mật khẩu, tối thiểu 6 ký tự và tối đa 12 ký tự
         password: Yup.string()
             .required("Please input your password")
             .min(6, "Password length should be at least 6 characters")
             .max(12, "Password cannot exceed more than 12 characters"),
+        // Yêu cầu xác nhận mật khẩu, phải khớp với mật khẩu đã nhập
         confirmPassword: Yup.string()
             .required("Please input confirm password")
             .oneOf([Yup.ref("password")], "Passwords do not match"),
+        // Yêu cầu địa chỉ
         address: Yup.string().required("Please input your address"),
+        // Yêu cầu số điện thoại, kiểm tra theo biểu thức chính quy
         phoneNumber: Yup.string()
             .required("Please input your phone number")
             .matches(phoneValidation, "Invalid phone number"),
+        // Yêu cầu email, kiểm tra theo biểu thức chính quy
         email: Yup.string()
             .required("Please input your email")
             .matches(emailValidation, "Invalid email format"),
@@ -52,35 +62,38 @@ const RegisterPage = () => {
     // Sử dụng useForm từ react-hook-form để quản lý trạng thái form
     const methods = useForm({
         defaultValues: {
-            fullName: "",
-            age: "",
-            gender: "",
-            user: "",
-            password: "",
-            confirmPassword: "",
-            address: "",
-            phoneNumber: "",
-            email: "",
+            fullName: "", // Giá trị mặc định cho tên đầy đủ
+            age: "", // Giá trị mặc định cho tuổi
+            gender: "", // Giá trị mặc định cho giới tính
+            user: "", // Giá trị mặc định cho tên người dùng
+            password: "", // Giá trị mặc định cho mật khẩu
+            confirmPassword: "", // Giá trị mặc định cho xác nhận mật khẩu
+            address: "", // Giá trị mặc định cho địa chỉ
+            phoneNumber: "", // Giá trị mặc định cho số điện thoại
+            email: "", // Giá trị mặc định cho email
         },
         resolver: yupResolver(schema), // Sử dụng yupResolver để tích hợp Yup với react-hook-form
     });
 
     // Destructure các phương thức và trạng thái từ useForm
     const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        reset,
+        handleSubmit, // Hàm để xử lý submit form
+        control, // Đối tượng để kiểm soát các trường trong form
+        formState: { errors }, // Trạng thái của form, bao gồm các lỗi
+        reset, // Hàm để reset form về giá trị mặc định
     } = methods;
 
     // Hàm xử lý khi form hợp lệ
     const onValid = (formValue) => {
+        // Dispatch hành động để tạo người dùng mới với giá trị từ form
         dispatch(actCreateNewUser(formValue));
-        reset(); // Reset form sau khi gửi
+        // Reset form sau khi gửi thành công
+        reset();
     };
 
     // Hàm chuyển hướng đến trang đăng nhập
     const handleRedirectToLoginPage = () => {
+        // Sử dụng navigate để điều hướng tới trang đăng nhập
         navigate(ROUTES.LOGIN_PAGE);
     };
 
@@ -88,7 +101,7 @@ const RegisterPage = () => {
         <div>
             <div className="flex justify-center items-center h-[100px] px-10">
                 <Link to={ROUTES.HOME_PAGE}>
-                    <img className="m-auto" src={Logo} />
+                    <img className="m-auto" src={Logo} alt="" />
                 </Link>
             </div>
             <div className="flex flex-col justify-center items-center gap-2">

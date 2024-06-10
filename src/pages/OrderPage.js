@@ -17,11 +17,17 @@ import { actAddBill } from "../redux/features/checkoutSlice"; // Import action t
 import { actClearCarts } from "../redux/features/cartSlice";
 import { useForm, FormProvider } from "react-hook-form";
 import QualityDefault from "../components/QualityDefault";
+import BannerShop from "../assets/images/banner-shop.png";
+import { RightOutlined } from "@ant-design/icons";
 
 // Định nghĩa các biểu thức kiểm tra hợp lệ cho số điện thoại và email
-const phoneValidation = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+// const phoneValidation = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+// const emailValidation =
+//     /^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$/;
+
+const phoneValidation = /^(84|0[3|5|7|8|9])([0-9]{8})$/;
 const emailValidation =
-    /^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$/;
+    /^[a-z][a-z0-9_.]{5,31}@[a-z0-9]{2,}(\.[a-z]{2,4}){1,2}$/;
 
 // Định nghĩa schema của form bằng Yup
 const schema = Yup.object().shape({
@@ -46,6 +52,7 @@ const OrderPage = () => {
     const navigate = useNavigate(); // Sử dụng hook useNavigate để điều hướng
     const { userInfo } = useSelector((state) => state.user); // Lấy thông tin người dùng từ Redux store
     const { carts } = useSelector((state) => state.cart); // Lấy thông tin giỏ hàng từ Redux store
+
     // Khởi tạo form với các giá trị mặc định và schema xác thực
     const methods = useForm({
         defaultValues: {
@@ -60,22 +67,23 @@ const OrderPage = () => {
             orderNotes: "",
             feeShip: "",
             payment: "",
-            // total: "",
         },
         resolver: yupResolver(schema), // Sử dụng Yup để xác thực form
     });
 
     // Giải cấu trúc các phương thức và trạng thái của form
     const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        reset,
+        handleSubmit, // Hàm để xử lý khi form được submit
+        control, // Điều khiển các input của form
+        formState: { errors }, // Trạng thái lỗi của form
+        reset, // Hàm để reset form
     } = methods;
 
     // Hàm xử lý khi form hợp lệ
     const onValid = (formValue) => {
         console.log(formValue, "form value billing details order page");
+
+        // Tạo dữ liệu đơn hàng từ giá trị form và thông tin thêm
         const orderData = {
             ...formValue,
             userId: userInfo.id, // Thêm ID người dùng vào dữ liệu đơn hàng
@@ -84,19 +92,37 @@ const OrderPage = () => {
             createAt: new Date().getTime(), // Thêm thời gian tạo đơn hàng
             orderNumber: makeOrderNumber(), // Tạo số đơn hàng
         };
+
         console.log(orderData, "orderData");
 
         // Gửi các action để thêm đơn hàng và hóa đơn
-        dispatch(actAddOrder(orderData));
-        dispatch(actAddBill(orderData));
-        dispatch(clearOrder()); // Xóa giỏ hàng sau khi đặt hàng
-        dispatch(actClearCarts());
+        dispatch(actAddOrder(orderData)); // Dispatch action để thêm đơn hàng
+        dispatch(actAddBill(orderData)); // Dispatch action để thêm hóa đơn
+        dispatch(clearOrder()); // Dispatch action để xóa đơn hàng
+        dispatch(actClearCarts()); // Dispatch action để xóa giỏ hàng
         navigate(ROUTES.CHECK_OUT_PAGE); // Điều hướng tới trang checkout
     };
 
     // JSX để render giao diện
     return (
         <div>
+            <div
+                style={{ backgroundImage: `url(${BannerShop})` }}
+                className="banner-shop w-full h-[316px] bg-cover bg-bottom flex"
+            >
+                <div className="text-center m-auto">
+                    <span className="text-[48px] text-[#000000] font-[500] ">
+                        Products
+                    </span>
+                    <p className="text-[16px] text-[#000000] font-[500]">
+                        Home
+                        <span>
+                            <RightOutlined />
+                        </span>
+                        Order
+                    </p>
+                </div>
+            </div>
             <form
                 className="order-page-container"
                 onSubmit={handleSubmit(onValid)}
@@ -132,7 +158,7 @@ const OrderPage = () => {
                             />
                         </FormProvider>
                         {/* <YourOrder control={control} errors={errors} /> */}
-                        <div className="billing-detail__submit-btn">
+                        <div className="billing-detail__submit-btn flex justify-center mb-12">
                             {/* Nút đặt hàng */}
                             <Button htmlType="submit">Place order</Button>
                         </div>

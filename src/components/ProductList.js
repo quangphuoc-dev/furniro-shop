@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Pagination, Row, Select } from "antd";
+import { Pagination, Select } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
     actFetchAllProducts,
@@ -13,81 +13,67 @@ import { formatNumber } from "../utils/formatNumber";
 import { useLocation } from "react-router-dom";
 
 const ProductList = () => {
-    const dispatch = useDispatch();
-    const { isLoading, products, pagination, searchKey, filter, params } =
-        useSelector((state) => state.product);
-    const location = useLocation();
-    const [selectedValue, setSelectedValue] = useState("Lọc theo giá:");
-    const [selectedSort, setSelectedSort] = useState("Sắp xếp theo:");
+    // Lấy trạng thái và hành động từ Redux
+    const dispatch = useDispatch(); // Hook để lấy hàm dispatch từ Redux
+    const { isLoading, products, pagination, filter, params } = useSelector(
+        (state) => state.product // Lấy các giá trị cần thiết từ Redux store sử dụng hook useSelector
+    );
+
+    // Lấy thông tin vị trí của trang hiện tại
+    const location = useLocation(); // Hook để lấy thông tin về vị trí hiện tại của trang
+
+    // State cho các giá trị filter và sắp xếp được chọn
+    const [selectedValue, setSelectedValue] = useState("Lọc theo giá:"); // State để lưu trữ giá trị filter được chọn
+    const [selectedSort, setSelectedSort] = useState("Sắp xếp theo:"); // State để lưu trữ giá trị sắp xếp được chọn
 
     // Fetch danh sách sản phẩm khi component được render
     useEffect(() => {
-        const paramsInit = new URLSearchParams(location.search);
-        const brandName = paramsInit.get("brandName");
+        const paramsInit = new URLSearchParams(location.search); // Lấy các tham số từ URL
+        const brandName = paramsInit.get("brandName"); // Lấy giá trị của tham số "brandName"
 
+        // Dispatch action để fetch danh sách sản phẩm từ API
         dispatch(
             actFetchAllProducts({
-                _page: pagination.currentPage ?? 1,
-                _limit: pagination.limitPerPage,
-                q: params.search ?? brandName,
-                filter,
-                ...params,
+                _page: pagination.currentPage ?? 1, // Trang hiện tại hoặc mặc định là trang 1
+                _limit: pagination.limitPerPage, // Số lượng sản phẩm trên mỗi trang
+                q: params.search ?? brandName, // Từ khóa tìm kiếm hoặc giá trị "brandName"
+                filter, // Các giá trị filter
+                ...params, // Các tham số khác trong URL
             })
         );
         // eslint-disable-next-line
-    }, [location, pagination.currentPage, filter]);
+    }, [location, pagination.currentPage, filter]); // Dependency là location và các giá trị trong Redux store cần để fetch lại dữ liệu
 
+    // Làm sạch các giá trị filter khi URL thay đổi
     useEffect(() => {
-        // Làm sạch các giá trị filter ở đây
-        deleteFilterReducer();
-        setSelectedValue("Lọc theo giá:");
-        setSelectedSort("Sắp xếp theo:");
-    }, [location.search, location.pathname]);
+        deleteFilterReducer(); // Action để xóa các giá trị filter trong Redux store
+        setSelectedValue("Lọc theo giá:"); // Reset giá trị filter được chọn về giá trị mặc định
+        setSelectedSort("Sắp xếp theo:"); // Reset giá trị sắp xếp được chọn về giá trị mặc định
+    }, [location.search, location.pathname]); // Dependency là location.search và location.pathname
 
     // Xử lý thay đổi trang
     const handleChangePage = (newPage) => {
-        dispatch(setNewPage(newPage));
+        dispatch(setNewPage(newPage)); // Action để cập nhật trang hiện tại trong Redux store
     };
-
-    // // Fetch lại danh sách sản phẩm khi thay đổi từ khóa tìm kiếm
-    // useEffect(() => {
-    //     dispatch(
-    //         actFetchAllProducts({
-    //             _page: 1,
-    //             _limit: pagination.limitPerPage,
-    //             q: searchKey,
-    //             ...params,
-    //         })
-    //     );
-    //     // eslint-disable-next-line
-    // }, [searchKey]);
 
     // Xử lý thay đổi filter
     const handleFilterChange = async (valueFilter) => {
-        setSelectedValue(valueFilter);
-        dispatch(filterReducer(valueFilter));
-        dispatch(setNewPage(1));
+        setSelectedValue(valueFilter); // Cập nhật giá trị filter được chọn
+        dispatch(filterReducer(valueFilter)); // Action để cập nhật giá trị filter trong Redux store
+        dispatch(setNewPage(1)); // Action để đặt trang hiện tại về trang 1
     };
 
+    // Xử lý thay đổi sắp xếp
     const handleSortChange = async (valueFilter) => {
-        setSelectedSort(valueFilter);
-        dispatch(filterReducer(valueFilter));
-        dispatch(setNewPage(1));
+        setSelectedSort(valueFilter); // Cập nhật giá trị sắp xếp được chọn
+        dispatch(filterReducer(valueFilter)); // Action để cập nhật giá trị sắp xếp trong Redux store
+        dispatch(setNewPage(1)); // Action để đặt trang hiện tại về trang 1
     };
 
-    // // Fetch lại danh sách sản phẩm khi thay đổi filter
-    // const { filter } = useSelector((state) => state.product);
-    // useEffect(() => {
-    //     dispatch(
-    //         actFetchAllProducts({
-    //             _page: 1,
-    //             _limit: pagination.limitPerPage,
-    //             q: searchKey,
-    //             ...params,
-    //         })
-    //     );
-    //     // eslint-disable-next-line
-    // }, [filter]);
+    // Xử lý khi click vào sản phẩm để chuyển đến trang detailProduct
+    const handleProductClick = (productId) => {
+        globalNavigate(`/products/${productId}`); // Sử dụng globalNavigate để điều hướng đến trang detailProduct
+    };
 
     // Hiển thị loading khi đang fetch dữ liệu
     if (isLoading) {
@@ -137,11 +123,6 @@ const ProductList = () => {
                 </div>
             );
         });
-    };
-
-    // Xử lý khi click vào sản phẩm để chuyển đến trang detailProduct
-    const handleProductClick = (productId) => {
-        globalNavigate(`/products/${productId}`); // Sử dụng globalNavigate để điều hướng đến trang detailProduct
     };
 
     return (

@@ -1,6 +1,6 @@
 // Import các thư viện và module cần thiết
-import { Input, InputNumber } from "antd"; // Thư viện Ant Design để tạo các thành phần giao diện
-import { CloseCircleOutlined, CloseOutlined } from "@ant-design/icons"; // Icon đóng từ thư viện Ant Design
+import { InputNumber } from "antd"; // Thư viện Ant Design để tạo các thành phần giao diện
+import { CloseCircleOutlined } from "@ant-design/icons"; // Icon đóng từ thư viện Ant Design
 import { useDispatch, useSelector } from "react-redux"; // Hook để sử dụng Redux trong React
 import React from "react"; // Thư viện React
 import { formatNumber } from "../utils/formatNumber";
@@ -10,7 +10,7 @@ import {
     actUpdateQuantityOfProduct,
 } from "../redux/features/cartSlice"; // Các action từ Redux slice cho giỏ hàng
 
-const PaymentTable = () => {
+const CartTable = () => {
     // Sử dụng hook useDispatch để gửi các action tới Redux store
     const dispatch = useDispatch();
     // Lấy trạng thái giỏ hàng từ Redux store
@@ -19,9 +19,11 @@ const PaymentTable = () => {
     // Hàm định dạng số theo dạng có dấu chấm ngăn cách hàng nghìn
 
     // Hàm xử lý khi thay đổi số lượng sản phẩm
-    const onChangeQuantity = (id,size, quantity) => {
+    const onChangeQuantity = (id, size, quantity) => {
         // Gửi action cập nhật số lượng sản phẩm tới Redux store
-        dispatch(actUpdateQuantityOfProduct({ id: id,size, quantity: quantity }));
+        dispatch(
+            actUpdateQuantityOfProduct({ id: id, size, quantity: quantity })
+        );
     };
 
     // Hàm xử lý khi xóa sản phẩm khỏi giỏ hàng
@@ -61,7 +63,7 @@ const PaymentTable = () => {
                             value={cart.quantity}
                             style={{ width: 62, borderRadius: 0 }}
                             onChange={(value) =>
-                                onChangeQuantity(cart.id,cart.size, value)
+                                onChangeQuantity(cart.id, cart.size, value)
                             }
                         />
                     </div>
@@ -94,41 +96,7 @@ const PaymentTable = () => {
                 </div>
             </div>
         </div>
-
-        // <table className="cart-page-shop-table__shop-table">
-        //     <thead className="cart-page-shop-table__thead">
-        //         <tr className="cart-page-shop-table__thead-tr">
-        //             <th className="cart-page-shop-table__th2"></th>
-        //             <th className="cart-page-shop-table__th3">Product</th>
-        //             <th className="cart-page-shop-table__th4">Price</th>
-        //             <th className="cart-page-shop-table__th5">Quantity</th>
-        //             <th className="cart-page-shop-table__th6">Subtotal</th>
-        //             <th className="cart-page-shop-table__th1"></th>
-        //         </tr>
-        //     </thead>
-
-        //     <tbody className="cart-page-shop-table__tbody">
-
-        //     </tbody>
-
-        //     <tfoot>
-        //         <tr>
-        //             <td colSpan={6}>
-        //                 <div className="cart-page-shop-table__tfoot-grp">
-        //                     <div className="cart-page-shop-table__tfoot-grp-left">
-        //                         {/* Ô nhập mã giảm giá */}
-        //                         <Input placeholder="Coupon code " />
-        //                         <button className="cart-page-shop-table__btn-apply-coupon">
-        //                             <span>Apply Coupon</span>
-        //                         </button>
-        //                     </div>
-
-        //                 </div>
-        //             </td>
-        //         </tr>
-        //     </tfoot>
-        // </table>
     );
 };
 
-export default PaymentTable;
+export default CartTable;

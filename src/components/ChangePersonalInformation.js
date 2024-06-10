@@ -12,60 +12,67 @@ import dayjs from "dayjs";
 
 // Component cho phép người dùng thay đổi thông tin cá nhân
 const ChangePersonalInformation = () => {
+    // Khởi tạo dispatch để gọi các hành động Redux
     const dispatch = useDispatch();
+    // Lấy thông tin người dùng từ Redux store
     const { userInfo } = useSelector((state) => state.user);
 
-    // Định nghĩa các biểu thức chính xác sử dụng Yup
+    // Định nghĩa các biểu thức chính xác sử dụng Yup cho validation
     const phoneValidation = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
     const emailValidation =
         /^[a-z][a-z0-9_.]{5,32}@[a-z0-9]{2,}(.[a-z0-9]{2,4}){1,2}$/;
+
+    // Định nghĩa schema validation sử dụng Yup
     const schema = Yup.object().shape({
-        fullName: Yup.string().required("Please input your full name"),
-        age: Yup.string().required("Please input your age"),
+        fullName: Yup.string().required("Please input your full name"), // Trường fullName là bắt buộc
+        age: Yup.string().required("Please input your age"), // Trường age là bắt buộc
         email: Yup.string()
-            .required("Please input your email")
-            .matches(emailValidation, "type email was wrong"),
+            .required("Please input your email") // Trường email là bắt buộc
+            .matches(emailValidation, "type email was wrong"), // Kiểm tra định dạng email
         phoneNumber: Yup.string()
-            .required("Please input your phone number")
-            .matches(phoneValidation, "type phone number was wrong"),
-        gender: Yup.string().required("Please input your gender"),
-        dateOfBirth: Yup.string().required("Please input your date of birth"),
+            .required("Please input your phone number") // Trường phoneNumber là bắt buộc
+            .matches(phoneValidation, "type phone number was wrong"), // Kiểm tra định dạng số điện thoại
+        gender: Yup.string().required("Please input your gender"), // Trường gender là bắt buộc
+        dateOfBirth: Yup.string().required("Please input your date of birth"), // Trường dateOfBirth là bắt buộc
     });
 
+    // Sử dụng useForm từ react-hook-form để quản lý trạng thái form
     const methods = useForm({
         defaultValues: {
-            fullName: "",
-            age: "",
-            email: "",
-            phoneNumber: "",
-            gender: "",
-            dateOfBirth: "",
+            fullName: "", // Giá trị mặc định cho trường fullName
+            age: "", // Giá trị mặc định cho trường age
+            email: "", // Giá trị mặc định cho trường email
+            phoneNumber: "", // Giá trị mặc định cho trường phoneNumber
+            gender: "", // Giá trị mặc định cho trường gender
+            dateOfBirth: "", // Giá trị mặc định cho trường dateOfBirth
         },
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schema), // Sử dụng yupResolver để tích hợp Yup với react-hook-form
     });
 
+    // Destructure các phương thức và trạng thái từ useForm
     const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        reset,
+        handleSubmit, // Hàm dùng để xử lý sự kiện submit form
+        control, // Đối tượng để điều khiển các field của form
+        formState: { errors }, // Trạng thái của form, bao gồm các lỗi validation
+        reset, // Hàm để đặt lại các giá trị trong form
     } = methods;
 
-    // Xử lý khi form hợp lệ được gửi
+    // Hàm xử lý khi form hợp lệ được gửi
     const onValid = (formValue) => {
         dispatch(
             actUpdateUserById({
-                id: userInfo.id,
-                userUpdate: formValue,
+                id: userInfo.id, // ID người dùng để cập nhật
+                userUpdate: formValue, // Dữ liệu người dùng mới
             })
         );
     };
 
+    // Sử dụng useEffect để gọi hành động lấy thông tin người dùng khi component được render
     useEffect(() => {
-        dispatch(actFetchUserById(userInfo.id));
+        dispatch(actFetchUserById(userInfo.id)); // Gọi hành động lấy thông tin người dùng
         reset({ ...userInfo }); // Đặt lại form về giá trị của userInfo
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, []); // Mảng phụ thuộc rỗng để useEffect chỉ chạy một lần khi component được mount
 
     return (
         <div className="change-pass-word-wrapper">

@@ -1,40 +1,24 @@
 // Import các thư viện và module cần thiết
-import React, { useEffect } from "react"; // Import React để tạo component
+import React, { useEffect, useCallback } from "react"; // Import React để tạo component
 import { useDispatch } from "react-redux"; // Import useDispatch để dispatch các action của Redux
 import { actDeleteProductInCarts } from "../redux/features/cartSlice"; // Import action để xóa sản phẩm trong giỏ hàng từ Redux slice
 import { Select } from "antd/es"; // Import component Select từ Ant Design
-import { Controller, useForm, useFormContext } from "react-hook-form"; // Import Controller từ React Hook Form để quản lý form
+import { Controller, useWatch } from "react-hook-form"; // Import Controller từ React Hook Form để quản lý form
+import { formatNumber } from "../utils/formatNumber";
 
 // Khai báo component YourOrder nhận props từ parent component
 const YourOrder = (props) => {
-    const dispatch = useDispatch(); // Sử dụng hook useDispatch để lấy hàm dispatch của Redux
-    const cartsList = JSON.parse(localStorage.getItem("key_carts_list")); // Lấy danh sách sản phẩm trong giỏ hàng từ localStorage
+    // Sử dụng hook useDispatch để lấy hàm dispatch của Redux
+    const dispatch = useDispatch();
+
+    // Lấy danh sách sản phẩm trong giỏ hàng từ localStorage
+    const cartsList = JSON.parse(localStorage.getItem("key_carts_list"));
 
     // Giải cấu trúc props nhận từ parent
     const { isCheckoutPage, setValue, control, errors } = props;
 
-    // Hàm định dạng số thành chuỗi có dấu phân cách
-    const formatNumber = (num) => {
-        let numString = "";
-        while (num > 0) {
-            let div = num % 1000;
-            num = Math.floor(num / 1000);
-            if (num !== 0) {
-                if (div < 10) {
-                    div = "00" + div;
-                } else if (div < 100) {
-                    div = "0" + div;
-                }
-                numString = "." + div + numString;
-            } else {
-                numString = div + numString;
-            }
-        }
-        return numString;
-    };
-
     // Hàm tính tổng tiền hóa đơn
-    const getTotalMoneyInBill = () => {
+    const getTotalMoneyInBill = useCallback(() => {
         if (!cartsList) {
             return 0;
         }
@@ -42,20 +26,43 @@ const YourOrder = (props) => {
             return total + parseFloat(cart.price) * parseFloat(cart.quantity);
         }, 0);
 
-        return formatNumber(totalMoneyInBill);
-    };
+        return totalMoneyInBill;
+    }, [cartsList]);
 
     // Hàm xử lý khi xóa sản phẩm khỏi giỏ hàng
     const handleDeleteProductInYourOrder = (id) => {
+        // Gửi action actDeleteProductInCarts với id sản phẩm cần xóa
         dispatch(actDeleteProductInCarts(id));
     };
 
+    // useEffect(() => {
+    //     // Hàm getTotalMoneyInBill trả về tổng tiền
+    //     const totalMoney = getTotalMoneyInBill();
+    //     // Gán giá trị của "total" bằng kết quả của getTotalMoneyInBill
+    //     setValue("total", totalMoney ?? 0);
+    // }, [setValue]); // useEffect sẽ chạy lại khi setValue thay đổi
+
+    // Các hàm và logic khác của component
+
+    // Dùng useWatch của react-hook-form để theo dõi sự thay đổi giá trị của trường "feeShip".
+    const feeShip = useWatch({
+        control, // Đối tượng control từ react-hook-form, được sử dụng để quản lý trạng thái của form.
+        name: "feeShip", // Tên của trường cần theo dõi. Trong trường hợp này, ta đang theo dõi trường "feeShip".
+    });
+
+    // Nó nhận hai đối số: một hàm chứa tác vụ phụ, và một mảng phụ thuộc.
     useEffect(() => {
-        // Hàm getTotalMoneyInBill trả về tổng tiền
+        // Tính tổng tiền của các mặt hàng trong hóa đơn.
         const totalMoney = getTotalMoneyInBill();
-        // Gán giá trị của total bằng kết quả của getTotalMoneyInBill
-        setValue("total", totalMoney ?? 0);
-    }, [setValue]);
+        // Tính tổng số tiền bao gồm cả phí vận chuyển.
+        // Nếu feeShip là null hoặc undefined, nó sẽ mặc định là 0.
+        const totalWithFeeShip = totalMoney + (feeShip || 0);
+        // Sử dụng hàm setValue từ react-hook-form để đặt giá trị cho trường "total".
+        setValue("total", totalWithFeeShip);
+        // Mảng phụ thuộc xác định khi nào hiệu ứng sẽ được thực thi lại.
+        // Hiệu ứng này sẽ được thực thi lại mỗi khi feeShip, setValue, hoặc getTotalMoneyInBill thay đổi.
+    }, [feeShip, setValue, getTotalMoneyInBill]);
+
     // Hàm render các sản phẩm trong giỏ hàng
     const renderProductInYourOrder = (cartsList) => {
         if (!cartsList || cartsList.length === 0) {
@@ -64,7 +71,7 @@ const YourOrder = (props) => {
         return cartsList.map((product) => {
             return (
                 <div>
-                    <div className="flex gap-[200px] my-5">
+                    <div className="flex gap-[200px] justify-between my-5">
                         <div>
                             <p className="text-[20px] text-[#000000] font-500">
                                 {product.name}
@@ -98,42 +105,6 @@ const YourOrder = (props) => {
                             {formatNumber(product.price * product.quantity)}
                         </div>
                     </div>
-                    {/* <React.Fragment key={product.id}>
-                        <tr>
-                            <td>
-                                <p>
-                                    {product.name} × {product.quantity}
-                                </p>
-                                <p>Color: {product.color}</p>
-                                <p>Material: {product.material}</p>
-                                {!!isCheckoutPage ? (
-                                    ""
-                                ) : (
-                                    <p
-                                        style={{
-                                            color: "#b37e6b",
-                                            textDecoration: "underline",
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={() =>
-                                            handleDeleteProductInYourOrder(
-                                                product.id
-                                            )
-                                        }
-                                    >
-                                        Del
-                                    </p>
-                                )}
-                            </td>
-                            <td>
-                                <h3>
-                                    {formatNumber(
-                                        product.price * product.quantity
-                                    )}
-                                </h3>
-                            </td>
-                        </tr>
-                    </React.Fragment> */}
                 </div>
             );
         });
@@ -142,7 +113,7 @@ const YourOrder = (props) => {
     // JSX để render giao diện
     return (
         <div className="your-order-container">
-            <div className="your-order">
+            <div className="your-order my-[35px] mx-[74px] flex flex-col gap-5">
                 <div
                     className={`${
                         !!isCheckoutPage
@@ -167,7 +138,7 @@ const YourOrder = (props) => {
                             : "your-order__your-order-table-grp"
                     }`}
                 >
-                    <div className="flex gap-[350px] justify-center">
+                    <div className="flex gap-60 sm:gap-80 md:gap-80 justify-center">
                         <p className="text-[24px] text-[#000000] font-500">
                             Product
                         </p>
@@ -177,8 +148,12 @@ const YourOrder = (props) => {
                     </div>
                     <div>{renderProductInYourOrder(cartsList)}</div>
                     <div className="flex gap-[200px] justify-center">
-                        <p>Subtotal</p>
-                        <p>{getTotalMoneyInBill()}</p>
+                        <p className="text-[20px] text-[#000000] font-[500]">
+                            Subtotal
+                        </p>
+                        <p className="text-[20px] text-[#000000] font-[500]">
+                            {formatNumber(getTotalMoneyInBill())}
+                        </p>
                     </div>
                     <div>
                         <div>
@@ -292,11 +267,15 @@ const YourOrder = (props) => {
                                     render={({ field }) => {
                                         return (
                                             <div>
-                                                <div>
-                                                    <h3>Total</h3>
-                                                </div>
-                                                <div>
-                                                    <h3>{field.value}</h3>
+                                                <div className="flex justify-center items-center gap-5 my-5">
+                                                    <h3 className="text-[24px] text-[#b88e2f] font-[700]">
+                                                        Total:
+                                                    </h3>
+                                                    <h3 className="text-[24px] text-[#b88e2f] font-[700]">
+                                                        {formatNumber(
+                                                            field.value
+                                                        )}
+                                                    </h3>
                                                 </div>
                                             </div>
                                         );
@@ -305,134 +284,6 @@ const YourOrder = (props) => {
                             </div>
                         </div>
                     </div>
-
-                    {/* <table>
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderProductInYourOrder(cartsList)}
-                            <tr>
-                                <td>
-                                    <h3>Subtotal</h3>
-                                </td>
-                                <td>
-                                    <h3>{getTotalMoneyInBill()}</h3>
-                                </td>
-                            </tr>
-
-                            {!isCheckoutPage && (
-                                <tr>
-                                    <td>
-                                        <h3>Shipping</h3>
-                                    </td>
-                                    <td>
-                                        <Controller
-                                            control={control}
-                                            name="feeShip"
-                                            render={({ field }) => {
-                                                return (
-                                                    <Select
-                                                        {...field}
-                                                        allowClear
-                                                        style={{
-                                                            width: 200,
-                                                        }}
-                                                        options={[
-                                                            {
-                                                                value: 0,
-                                                                label: "Normal Shipping - 0đ",
-                                                            },
-                                                            {
-                                                                value: 30000,
-                                                                label: "Fast Shipping - 30.000đ",
-                                                            },
-                                                        ]}
-                                                    />
-                                                );
-                                            }}
-                                        />
-                                        {!!errors.feeShip?.message && (
-                                            <p
-                                                style={{
-                                                    color: "red",
-                                                    padding: "0px 10px",
-                                                }}
-                                            >
-                                                {errors.feeShip?.message}
-                                            </p>
-                                        )}
-                                    </td>
-                                </tr>
-                            )}
-
-                            {!isCheckoutPage && (
-                                <tr>
-                                    <td>
-                                        <h3>Payment</h3>
-                                    </td>
-                                    <td>
-                                        <Controller
-                                            control={control}
-                                            name="payment"
-                                            render={({ field }) => {
-                                                return (
-                                                    <Select
-                                                        {...field}
-                                                        allowClear
-                                                        style={{
-                                                            width: 200,
-                                                        }}
-                                                        options={[
-                                                            {
-                                                                value: "Ship COD",
-                                                                label: "Ship COD",
-                                                            },
-                                                            {
-                                                                value: "Direct Bank Transfer",
-                                                                label: "Direct Bank Transfer",
-                                                            },
-                                                        ]}
-                                                    />
-                                                );
-                                            }}
-                                        />
-                                        {!!errors.payment?.message && (
-                                            <p
-                                                style={{
-                                                    color: "red",
-                                                    padding: "0px 10px",
-                                                }}
-                                            >
-                                                {errors.payment?.message}
-                                            </p>
-                                        )}
-                                    </td>
-                                </tr>
-                            )}
-                            {!!isCheckoutPage && (
-                                <tr>
-                                    <td>
-                                        <h3>Payment method</h3>
-                                    </td>
-                                    <td>
-                                        <h3>Credit card payment</h3>
-                                    </td>
-                                </tr>
-                            )}
-                            <tr>
-                                <td>
-                                    <h3>Total</h3>
-                                </td>
-                                <td>
-                                    <h3>{getTotalMoneyInBill()}</h3>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> */}
                 </div>
             </div>
         </div>

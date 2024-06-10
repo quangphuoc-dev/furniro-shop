@@ -38,10 +38,12 @@ function ProductInfo() {
                 <img
                     src={ProInfo1}
                     className="bg-[#f9f1e7] rounded-[10px] w-[605px] h-[348px]"
+                    alt=""
                 />
                 <img
                     src={ProInfo2}
                     className="bg-[#f9f1e7] rounded-[10px] w-[605px] h-[348px] "
+                    alt=""
                 />
             </div>
         </div>

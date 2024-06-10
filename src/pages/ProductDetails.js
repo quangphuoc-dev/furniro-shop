@@ -1,6 +1,6 @@
 import ProductItem from "../components/ProductItem";
-import ProductInfo from "../components/ProductInfo";
 import { useEffect } from "react";
+import QualityDefault from "../components/QualityDefault";
 
 function ProductDetails() {
     useEffect(() => {
@@ -10,7 +10,7 @@ function ProductDetails() {
     return (
         <div>
             <ProductItem />
-            {/* <ProductInfo /> */}
+            <QualityDefault />
         </div>
     );
 }

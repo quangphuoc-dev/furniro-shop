@@ -3,8 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Category() {
-    // const [listBrands, setListBrands] = useState([]);
-    // const [products, setProducts] = useState([]);
     const [brandsWithOneProduct, setBrandsWithOneProduct] = useState([]);
 
     const navigate = useNavigate();

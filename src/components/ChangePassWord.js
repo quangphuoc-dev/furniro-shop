@@ -8,54 +8,58 @@ import { actUpdatePasswordById } from "../redux/features/userSlice";
 
 // Component để thay đổi mật khẩu người dùng
 const ChangePassWord = () => {
+    // Khởi tạo dispatch để gọi các hành động Redux
     const dispatch = useDispatch();
+    // Lấy thông tin người dùng từ Redux store
     const { userInfo } = useSelector((state) => state.user);
 
-    // Schema để xác thực dữ liệu nhập vào
+    // Schema để xác thực dữ liệu nhập vào sử dụng Yup
     const schema = Yup.object().shape({
         newPassword: Yup.string()
-            .required("Please input your password")
-            .min(6, "Password length should be at least 6 characters")
-            .max(12, "Password cannot exceed more than 12 characters"),
+            .required("Please input your password") // Trường newPassword là bắt buộc
+            .min(6, "Password length should be at least 6 characters") // Độ dài mật khẩu tối thiểu là 6 ký tự
+            .max(12, "Password cannot exceed more than 12 characters"), // Độ dài mật khẩu tối đa là 12 ký tự
         confirmPassword: Yup.string()
-            .required("Please input confirm password")
-            .oneOf([Yup.ref("newPassword")], "Password do not match"),
+            .required("Please input confirm password") // Trường confirmPassword là bắt buộc
+            .oneOf([Yup.ref("newPassword")], "Password do not match"), // Giá trị của confirmPassword phải trùng khớp với newPassword
     });
 
+    // Sử dụng useForm từ react-hook-form để quản lý trạng thái form
     const methods = useForm({
         defaultValues: {
-            currentPassword: "",
-            newPassword: "",
-            confirmPassword: "",
+            currentPassword: "", // Giá trị mặc định cho trường currentPassword
+            newPassword: "", // Giá trị mặc định cho trường newPassword
+            confirmPassword: "", // Giá trị mặc định cho trường confirmPassword
         },
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schema), // Sử dụng yupResolver để tích hợp Yup với react-hook-form
     });
 
+    // Destructure các phương thức và trạng thái từ useForm
     const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        reset,
+        handleSubmit, // Hàm dùng để xử lý sự kiện submit form
+        control, // Đối tượng để điều khiển các field của form
+        formState: { errors }, // Trạng thái của form, bao gồm các lỗi validation
+        reset, // Hàm để đặt lại các giá trị trong form
     } = methods;
 
-    // Xử lý khi form được submit
+    // Hàm xử lý khi form được submit
     const onValid = (formValueChangePassword) => {
         // Kiểm tra mật khẩu hiện tại có đúng không
         if (
-            userInfo &&
-            userInfo.password !== formValueChangePassword.currentPassword
+            userInfo && // Kiểm tra xem userInfo có tồn tại không
+            userInfo.password !== formValueChangePassword.currentPassword // So sánh mật khẩu hiện tại
         ) {
-            return alert("Current password is incorrect!");
-        } else {
+            return alert("Current password is incorrect!"); // Thông báo lỗi nếu mật khẩu hiện tại không đúng
+        } else if (userInfo) {
             // Nếu đúng thì dispatch action để cập nhật mật khẩu mới
             const formValuePasswordUpdate = {
-                password: formValueChangePassword.newPassword,
-                confirmPassword: formValueChangePassword.confirmPassword,
+                password: formValueChangePassword.newPassword, // Mật khẩu mới
+                confirmPassword: formValueChangePassword.confirmPassword, // Xác nhận mật khẩu mới
             };
             dispatch(
                 actUpdatePasswordById({
-                    id: userInfo.id,
-                    userUpdate: formValuePasswordUpdate,
+                    id: userInfo.id, // ID người dùng để cập nhật
+                    userUpdate: formValuePasswordUpdate, // Dữ liệu mật khẩu mới
                 })
             );
         }

@@ -19,23 +19,8 @@ import {
     deleteFilterReducer,
 } from "../redux/features/productSlice";
 import axios from "axios";
-import { globalNavigate } from "../utils/globalHistory"; // Import globalNavigate
 
 function Header() {
-    // const carts = useSelector() lay du lieu cart tu store
-    // const items: MenuProps["items"] = [
-    //     {
-    //         label: <a href="http://localhost:3000/login">Login</a>,
-    //         key: "0",
-    //     },
-    //     {
-    //         type: "divider",
-    //     },
-    //     {
-    //         label: <a href="http://localhost:3000/register">Register</a>,
-    //         key: "1",
-    //     },
-    // ];
     // Sử dụng useDispatch để tạo hàm dispatch, dùng để gửi các hành động (actions) đến Redux store
     const dispatch = useDispatch();
 
@@ -44,9 +29,7 @@ function Header() {
     const [searchProductsResult, setSearchProductsResult] = useState([]);
 
     // Lấy các giá trị searchKey, pagination và params từ state.product trong Redux store
-    const { searchKey, pagination, params } = useSelector(
-        (state) => state.product
-    );
+    const { searchKey } = useSelector((state) => state.product);
 
     // Lấy các giá trị isLogin và userInfo từ state.user trong Redux store
     const { isLogin, userInfo } = useSelector((state) => state.user);
@@ -57,17 +40,6 @@ function Header() {
     // Khởi tạo state isToggle với giá trị mặc định là false và hàm setIsToggle để cập nhật giá trị của nó
     const [isToggle, setIsToggle] = useState(false);
 
-    // // Khởi tạo state isShowSubNavProductMobile với giá trị mặc định là false và hàm setIsShowSubNavProductMobile để cập nhật giá trị của nó
-    // const [isShowSubNavProductMobile, setIsShowSubNavProductMobile] =
-    //     useState(false);
-
-    // // Khởi tạo state isShowSubNavGiftMobile với giá trị mặc định là false và hàm setIsShowSubNavGiftMobile để cập nhật giá trị của nó
-    // const [isShowSubNavGiftMobile, setIsShowSubNavGiftMobile] = useState(false);
-
-    // // Khởi tạo state isShowSubNavBlogMobile với giá trị mặc định là false và hàm setIsShowSubNavBlogMobile để cập nhật giá trị của nó
-    // const [isShowSubNavBlogMobile, setIsShowSubNavBlogMobile] = useState(false);
-
-    // Mảng items chứa các đối tượng dùng để hiển thị các liên kết và chia cách trong menu cho người dùng chưa đăng nhập
     const items = [
         {
             key: "1", // Định danh duy nhất cho mục này
@@ -166,41 +138,6 @@ function Header() {
     ];
 
     const menu = <Menu items={productPageItems} />;
-    // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng thanh điều hướng chính
-    const handleToggleNavBar = () => {
-        // Đảo ngược giá trị của isToggle để mở hoặc đóng thanh điều hướng
-        setIsToggle(!isToggle);
-    };
-
-    // // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con sản phẩm trên di động
-    // const handleToggleSubNavProductMobile = () => {
-    //     // Đảo ngược giá trị của isShowSubNavProductMobile để mở hoặc đóng menu con sản phẩm
-    //     setIsShowSubNavProductMobile(!isShowSubNavProductMobile);
-    // };
-
-    // // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con quà tặng trên di động
-    // const handleToggleSubNavGiftMobile = () => {
-    //     // Đảo ngược giá trị của isShowSubNavGiftMobile để mở hoặc đóng menu con quà tặng
-    //     setIsShowSubNavGiftMobile(!isShowSubNavGiftMobile);
-    // };
-
-    // // Hàm xử lý sự kiện khi người dùng nhấn nút toggle để mở/đóng menu con blog trên di động
-    // const handleToggleSubNavBlogMobile = () => {
-    //     // Đảo ngược giá trị của isShowSubNavBlogMobile để mở hoặc đóng menu con blog
-    //     setIsShowSubNavBlogMobile(!isShowSubNavBlogMobile);
-    // };
-
-    // // Hàm xử lý sự kiện điều hướng người dùng về trang chủ
-    // const handleRedirectToHomePage = () => {
-    //     // Điều hướng người dùng đến trang chủ
-    //     navigate(ROUTES.HOME_PAGE);
-    // };
-
-    // // Hàm xử lý sự kiện điều hướng người dùng về trang giỏ hàng
-    // const handleRedirectToCartPage = () => {
-    //     // Điều hướng người dùng đến trang giỏ hàng
-    //     navigate(ROUTES.PAYMENT_PAGE);
-    // };
 
     // Hàm xử lý sự kiện khi người dùng tìm kiếm sản phẩm
     const handleSearchProduct = async (e) => {
@@ -306,7 +243,7 @@ function Header() {
     // console.log(searchProductsResult, "searchProductsResult");
 
     return (
-        <header className="bg-stone-300	 h-[100px] flex flex-row justify-between items-center px-1 sm:px-3 md:px-5 lg:px-10 sm:gap-5 md:gap-5">
+        <header className="bg-[#faf3ea] h-[100px] flex flex-row justify-between items-center px-1 sm:px-3 md:px-5 lg:px-10 sm:gap-5 md:gap-5">
             <div className="lg:hidden header-btn-show-navBar p-3">
                 <MenuOutlined onClick={showDrawerCategory} />
             </div>

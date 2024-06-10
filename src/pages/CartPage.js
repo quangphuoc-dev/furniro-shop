@@ -4,9 +4,11 @@ import { Button } from "antd"; // Thư viện Ant Design để tạo các thành
 import { useSelector } from "react-redux"; // Hook để sử dụng Redux trong React
 import { useNavigate } from "react-router-dom"; // Hook để điều hướng trong React Router
 import { ROUTES } from "../constants/routes"; // Các hằng số định tuyến của ứng dụng
-import PaymentTable from "../components/PaymentTable"; // Import component CardTable
 import QualityDefault from "../components/QualityDefault";
 import { formatNumber } from "../utils/formatNumber";
+import BannerShop from "../assets/images/banner-shop.png";
+import { RightOutlined } from "@ant-design/icons";
+import CartTable from "../components/PaymentTable";
 
 const CartPage = () => {
     // Sử dụng hook useNavigate để điều hướng trang
@@ -37,9 +39,26 @@ const CartPage = () => {
 
     return (
         <div>
+            <div
+                style={{ backgroundImage: `url(${BannerShop})` }}
+                className="banner-shop w-full h-[316px] bg-cover bg-bottom flex"
+            >
+                <div className="text-center m-auto">
+                    <span className="text-[48px] text-[#000000] font-[500] ">
+                        Products
+                    </span>
+                    <p className="text-[16px] text-[#000000] font-[500]">
+                        Home
+                        <span>
+                            <RightOutlined />
+                        </span>
+                        Cart
+                    </p>
+                </div>
+            </div>
             <div className="flex justify-center gap-[100px] my-[50px]">
                 <div>
-                    <PaymentTable />
+                    <CartTable />
                 </div>
                 <div>
                     <div className="flex flex-col items-center gap-2 ">
@@ -65,21 +84,6 @@ const CartPage = () => {
                             </div>
                         </div>
 
-                        {/* <div className="flex gap-3">
-                        <span>Subtotal</span>
-                        <span>{getTotalMoneyInBill()}</span>
-                    </div>
-                    <div className="flex gap-3">
-                        <p>Shipping</p>
-                        <p>
-                            {" "}
-                            Shipping options will be updated during checkout.
-                        </p>
-                    </div>
-                    <div>
-                        <p>Total</p>
-                        <span>{getTotalMoneyInBill()}</span>
-                    </div> */}
                         <div>
                             <Button onClick={handleRedirectToCheckOut}>
                                 Proceed to checkout
@@ -87,52 +91,6 @@ const CartPage = () => {
                         </div>
                     </div>
                 </div>
-                {/* <div className="cart-page-wrapper">
-                <div className="cart-page">
-                    <div className="cart-page-shop-table">
-                        <div className="cart-page-shop-table__shop-table-grp">
-                            <PaymentTable />
-                        </div>
-
-                        <div className="cart-page-cart-totals">
-                            <div className="cart-page-cart-totals__cart-totals">
-                                <div className="cart-page-cart-totals__title">
-                                    <h3>Cart totals</h3>
-                                </div>
-                                <table className="cart-page-cart-totals__car-totals-table">
-                                    <tbody>
-                                        <tr>
-                                            <td>Subtotal</td>
-                                            <td>{getTotalMoneyInBill()}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Shipping</td>
-                                            <td>
-                                                <p>
-                                                    Shipping options will be
-                                                    updated during checkout.
-                                                </p>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Total</td>
-                                            <td>{getTotalMoneyInBill()}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <div className="cart-page-cart-totals__btn-proceed-to-checkout">
-                                    <Button onClick={handleRedirectToCheckOut}>
-                                        Proceed to checkout
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
             </div>
             <div>
                 <QualityDefault />

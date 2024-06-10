@@ -12,49 +12,49 @@ import { Link } from "react-router-dom";
 import Logo from "../assets/images/header-logo.png";
 import Footer from "../components/Footer";
 
-// Định nghĩa schema validation cho form đăng nhập sử dụng Yup
-const loginSchema = Yup.object().shape({
-    user: Yup.string().required("Username is required"),
-    password: Yup.string().required("Password is required"),
-});
-
 const LoginPage = () => {
     // Khởi tạo dispatch để gọi các hành động Redux
     const dispatch = useDispatch();
     // Khởi tạo navigate để điều hướng giữa các trang
     const navigate = useNavigate();
 
+    // Định nghĩa schema validation cho form đăng nhập sử dụng Yup
+    const loginSchema = Yup.object().shape({
+        user: Yup.string().required("Username is required"), // Trường user là bắt buộc
+        password: Yup.string().required("Password is required"), // Trường password là bắt buộc
+    });
+
     // Sử dụng useForm từ react-hook-form để quản lý trạng thái form
     const methods = useForm({
         defaultValues: {
-            user: "",
-            password: "",
+            user: "", // Giá trị mặc định cho trường user
+            password: "", // Giá trị mặc định cho trường password
         },
         resolver: yupResolver(loginSchema), // Sử dụng yupResolver để tích hợp Yup với react-hook-form
     });
 
     // Destructure các phương thức và trạng thái từ useForm
     const {
-        control,
-        handleSubmit,
-        formState: { errors: errorsValidate },
+        control, // Đối tượng để điều khiển các field của form
+        handleSubmit, // Hàm dùng để xử lý sự kiện submit form
+        formState: { errors: errorsValidate }, // Trạng thái của form, bao gồm các lỗi validation
     } = methods;
 
     // Hàm xử lý khi form hợp lệ
     const onValid = (formValue) => {
-        dispatch(actLogin(formValue));
+        dispatch(actLogin(formValue)); // Gọi hành động login với giá trị form
     };
 
     // Hàm chuyển hướng đến trang đăng ký
     const handleRedirectToRegisterPage = () => {
-        navigate(ROUTES.REGISTER_PAGE);
+        navigate(ROUTES.REGISTER_PAGE); // Chuyển hướng đến trang đăng ký
     };
 
     return (
         <div>
             <div className="flex justify-center items-center h-[100px] px-10">
                 <Link to={ROUTES.HOME_PAGE}>
-                    <img className="m-auto" src={Logo} />
+                    <img className="m-auto" src={Logo} alt="logo" />
                 </Link>
             </div>
             <div className="flex flex-col justify-center items-center gap-2 mb-10">

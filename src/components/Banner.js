@@ -4,7 +4,6 @@ import { ROUTES } from "../constants/routes";
 function Banner() {
     return (
         <div className="bg-[url('assets/images/banner-FN.png')] bg-fixed bg-center banner-session w-full h-[718px] bg-cover flex items-center justify-end p-[58px]">
-            {/* <img className='' src={BannerImg}/> */}
             <div className="bg-[#fff3e3] flex flex-col py-[62px] px-[42px] items-start">
                 <h3 className="font-[600] text-[16px] text-[#333333] mb-[4px]">
                     New Arrival

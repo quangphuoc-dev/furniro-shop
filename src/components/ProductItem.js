@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    Button,
-    Col,
-    Input,
-    InputNumber,
-    Pagination,
-    Rate,
-    Row,
-    Select,
-} from "antd";
+import { Button, Col, InputNumber, Rate, Select } from "antd";
 import {
     CarOutlined,
     SafetyCertificateOutlined,
@@ -25,57 +16,70 @@ import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { actAddProductToCarts } from "../redux/features/cartSlice";
-import { makeRandomId } from "../utils/makeRandomId";
 import {
     actAddComment,
     actFetchAllComments,
-    actFetchAllCommentsCalcuStarAverage,
-    setNewPage,
+    // setNewPage,
 } from "../redux/features/commentSlice";
 import { actFetchUserById } from "../redux/features/userSlice";
 import dayjs from "dayjs";
 import { ROUTES } from "../constants/routes";
 import { formatNumber } from "../utils/formatNumber";
-import { globalNavigate } from "../utils/globalHistory"; // Import globalNavigate
 
 const schema = Yup.object().shape({
-    size: Yup.string().required("Please choose size"),
-    color: Yup.string().required("Please choose color"),
+    size: Yup.string().required("Please choose size"), // Kiểm tra trường size, yêu cầu phải có
+    color: Yup.string().required("Please choose color"), // Kiểm tra trường color, yêu cầu phải có
 });
+
 const schemaBoxReview = Yup.object().shape({
-    star: Yup.string().required("Please choose start"),
+    star: Yup.string().required("Please choose start"), // Kiểm tra trường star, yêu cầu phải có
 });
 
 const ProductItem = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const params = useParams();
+    // Khởi tạo các hooks cần thiết
+    const dispatch = useDispatch(); // Hook để dispatch các action tới store Redux
+    const navigate = useNavigate(); // Hook để điều hướng (navigation) giữa các route
+    const params = useParams(); // Hook để lấy các tham số từ URL (vd: productId)
+
+    // Lấy thông tin sản phẩm từ state Redux
     const { productInfo } = useSelector((state) => state.product);
-    const { imgURL, size, color, name, brands, id } = productInfo;
+    const { imgURL, size, color, name, brands, id } = productInfo; // Trích xuất các thuộc tính từ productInfo
+
+    // Lấy thông tin ảnh sản phẩm từ state Redux
     const { imgsProducts } = useSelector((state) => state.product);
+
+    // Lấy thông tin người dùng từ state Redux
     const { userInfo } = useSelector((state) => state.user);
-    const { fullName, user, phoneNumber, email, avatarURL } = userInfo;
+    const { fullName, user, phoneNumber, email, avatarURL } = userInfo; // Trích xuất các thuộc tính từ userInfo
+
+    // Lấy các bình luận từ state Redux
     const { comments } = useSelector((state) => state.comment);
-    const { commentsCalcuStarAverage } = useSelector((state) => state.comment);
-    const { pagination } = useSelector((state) => state.comment);
+    const { commentsCalcuStarAverage } = useSelector((state) => state.comment); // Lấy thông tin đánh giá sao từ state
+    const { pagination } = useSelector((state) => state.comment); // Lấy thông tin phân trang từ state
+
+    // Kiểm tra trạng thái đăng nhập từ localStorage
     const isLogin = JSON.parse(localStorage.getItem("isLogin"));
+
+    // Lấy danh sách sản phẩm từ state Redux
     const { products } = useSelector((state) => state.product);
 
-    const [quantityProduct, setQuantityProduct] = useState(1);
-    const [isShowBoxReview, setIsShowBoxReview] = useState(false);
+    // Khởi tạo state để quản lý số lượng sản phẩm và hiển thị box review
+    const [quantityProduct, setQuantityProduct] = useState(1); // State để quản lý số lượng sản phẩm
+    const [isShowBoxReview, setIsShowBoxReview] = useState(false); // State để quản lý hiển thị box review
 
+    // Khởi tạo form với react-hook-form và yupResolver để kiểm tra dữ liệu nhập vào
     const methods = useForm({
         defaultValues: {
-            size: "",
-            color: "",
+            size: "", // Giá trị mặc định cho size
+            color: "", // Giá trị mặc định cho color
         },
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schema), // Sử dụng yupResolver với schema đã định nghĩa
     });
     const {
         handleSubmit,
         control,
         formState: { errors },
-    } = methods;
+    } = methods; // Trích xuất các phương thức từ react-hook-form
 
     const {
         handleSubmit: handleSubmitBoxReview,
@@ -83,27 +87,32 @@ const ProductItem = () => {
         formState: { errors: errorsBoxReview },
     } = useForm({
         defaultValues: {
-            star: "",
-            comment: "",
+            star: "", // Giá trị mặc định cho star
+            comment: "", // Giá trị mặc định cho comment
         },
-        resolver: yupResolver(schemaBoxReview),
+        resolver: yupResolver(schemaBoxReview), // Sử dụng yupResolver với schemaBoxReview
     });
 
+    // Tìm ảnh sản phẩm phù hợp từ danh sách imgsProducts
     const imgsProduct = imgsProducts.find((item) => item.id === productInfo.id);
-    const [largeImg, setLargeImg] = useState(imgsProduct?.imgProduct1);
+    const [largeImg, setLargeImg] = useState(imgsProduct?.imgProduct1); // Khởi tạo state để quản lý ảnh lớn
+
+    // Hàm thay đổi ảnh lớn khi người dùng chọn ảnh khác
     const handleChangeImg = (imgPath) => {
-        setLargeImg(imgPath);
+        setLargeImg(imgPath); // Cập nhật ảnh lớn
     };
 
+    // useEffect để cập nhật ảnh lớn khi imgsProduct thay đổi
     useEffect(() => {
-        setLargeImg(imgsProduct?.imgProduct1);
+        setLargeImg(imgsProduct?.imgProduct1); // Cập nhật ảnh lớn khi imgsProduct thay đổi
     }, [imgsProduct]);
 
+    // useEffect để lấy dữ liệu khi component mount
     useEffect(() => {
-        window.scrollTo(0, 0);
-        dispatch(actFetchAllImgsProducts());
-        dispatch(actFetchProductById(params.productId));
-        dispatch(actFetchUserById(userInfo.id));
+        window.scrollTo(0, 0); // Cuộn trang lên đầu
+        dispatch(actFetchAllImgsProducts()); // Dispatch action để lấy tất cả ảnh sản phẩm
+        dispatch(actFetchProductById(params.productId)); // Dispatch action để lấy thông tin sản phẩm theo id
+        dispatch(actFetchUserById(userInfo.id)); // Dispatch action để lấy thông tin người dùng theo id
         dispatch(
             actFetchAllComments({
                 _page: 1,
@@ -111,117 +120,90 @@ const ProductItem = () => {
                 idProduct: params.productId,
                 ...params,
             })
-        );
-        // dispatch(
-        //   actFetchCommentById({
-        //     id: params.productId,
-        //   })
-        // );
-        // dispatch(actFetchAllCommentsCalcuStarAverage(params));
-        // eslint-disable-next-line
-    }, [navigate]);
+        ); // Dispatch action để lấy tất cả bình luận cho sản phẩm hiện tại
+    }, [navigate, dispatch, pagination.limitPerPage, params, userInfo.id]);
 
-    useEffect(
-        () => {
-            dispatch(
-                actFetchAllProducts({
-                    ...params,
-                    _sort: "star",
-                    _order: "asc",
-                    brands: productInfo.brands,
-                })
-            );
-        },
-        // eslint-disable-next-line
-        /*..*/
-        [productInfo.brands]
-    );
+    // useEffect để lấy danh sách sản phẩm theo thương hiệu khi productInfo.brands thay đổi
+    useEffect(() => {
+        dispatch(
+            actFetchAllProducts({
+                ...params,
+                _sort: "star", // Sắp xếp theo sao
+                _order: "asc", // Thứ tự tăng dần
+                brands: productInfo.brands, // Theo thương hiệu của sản phẩm hiện tại
+            })
+        );
+    }, [params, dispatch, productInfo.brands]);
+
     // const productsListRelated = products; //viết như này sẽ lỗi, phải clone ra
+    // Clone mảng products để tránh thay đổi trực tiếp
     const productsClone = [...products];
     const indexThisProduct = productsClone.findIndex((product) => {
         return parseFloat(params.productId) === product.id;
     });
-    productsClone.splice(indexThisProduct, 1);
+    productsClone.splice(indexThisProduct, 1); // Loại bỏ sản phẩm hiện tại khỏi mảng clone
 
-    // Hàm shuffle mảng
+    // Hàm shuffle mảng để đổi chỗ các phần tử trong mảng
     const shuffleArray = (array) => {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            [array[i], array[j]] = [array[j], array[i]]; // Đổi chỗ các phần tử
         }
         return array;
     };
 
     // Lấy ngẫu nhiên 4 sản phẩm từ mảng productsClone
     const getRandomProducts = (productsClone, count) => {
-        const shuffledProducts = shuffleArray([...productsClone]);
-        return shuffledProducts.slice(0, count);
+        const shuffledProducts = shuffleArray([...productsClone]); // Shuffle mảng clone
+        return shuffledProducts.slice(0, count); // Lấy 4 sản phẩm ngẫu nhiên
     };
 
     // Sử dụng hàm để lấy ngẫu nhiên 4 sản phẩm
     const relatedProductList = getRandomProducts(productsClone, 4);
 
+    // Hàm xử lý khi người dùng click vào sản phẩm
     const handleProductClick = (productId) => {
         console.log("Clicked on product with ID:", productId);
-        navigate(`${ROUTES.PRODUCT_PAGE}/${productId}  `);
+        navigate(`${ROUTES.PRODUCT_PAGE}/${productId}`); // Điều hướng đến trang chi tiết sản phẩm
     };
 
+    // Hàm xử lý khi form order hợp lệ
     const onValid = (formValueOrder) => {
         dispatch(
             actAddProductToCarts({
-                ...productInfo,
-                ...formValueOrder,
-                quantity: quantityProduct,
+                ...productInfo, //Lấy lại thông tin sản phẩm đó
+                ...formValueOrder, // Thêm thônng tin từ form order: size và color
+                quantity: quantityProduct, // Thêm số lượng sản phẩm
                 idProduct: productInfo.id,
-                // id: makeRandomId(),
             })
         );
     };
 
+    // Hàm xử lý khi form review hợp lệ
     const onValidBoxReview = (formValueBoxReview) => {
         const valueCommentBox = {
             ...formValueBoxReview,
-            nameProduct: name,
-            idProduct: id,
-            brands,
-            fullName,
-            userName: user,
-            phoneNumber,
-            email,
-            avatarURL,
-            dateComment: dayjs(new Date()).format("DD/MM/YYYY"),
+            nameProduct: name, // Thêm tên sản phẩm
+            idProduct: id, // Thêm id sản phẩm
+            brands, // Thêm thương hiệu sản phẩm
+            fullName, // Thêm tên đầy đủ của người dùng
+            userName: user, // Thêm tên người dùng
+            phoneNumber, // Thêm số điện thoại người dùng
+            email, // Thêm email người dùng
+            avatarURL, // Thêm URL avatar của người dùng
+            dateComment: dayjs(new Date()).format("DD/MM/YYYY"), // Thêm ngày bình luận
         };
-        // console.log(productInfo, "productInfo");
 
+        // Kiểm tra trạng thái đăng nhập
         if (isLogin) {
-            console.log(valueCommentBox, "valueCommentBox");
-            dispatch(actAddComment(valueCommentBox));
+            // console.log(valueCommentBox, "valueCommentBox");
+            dispatch(actAddComment(valueCommentBox)); // Dispatch action để thêm bình luận
         } else {
-            alert("You must be logged in to comment! ");
-            navigate(ROUTES.LOGIN_PAGE);
+            alert("You must be logged in to comment! "); // Hiển thị thông báo yêu cầu đăng nhập
+            navigate(ROUTES.LOGIN_PAGE); // Điều hướng đến trang đăng nhập
         }
-        setIsShowBoxReview(!isShowBoxReview);
+        setIsShowBoxReview(!isShowBoxReview); // Đóng box review sau khi gửi bình luận
     };
-
-    // để gọi ra comments đúng với sp đc comments
-    // chú ý truyền vô params cái id là id của sp => fil ra
-    //   useEffect(() => {
-    // dispatch(
-    //   actFetchCommentById({
-    //     // ...params,
-    //     // _page: 1,
-    //     // _limit: pagination.limitPerPage,
-    //     idProduct: params.productId,
-    //   })
-    // );
-    // dispatch(
-    //   actFetchAllCommentsCalcuStarAverage({
-    //     ...params,
-    //     idProduct: params.productId,
-    //   })
-    // );
-    // eslint-disable-next-line
-    //   }, [params.productId]);
 
     let sumStar = 0;
     let result = 0;
@@ -232,7 +214,7 @@ const ProductItem = () => {
         commentsCalcuStarAverage.length > 0
     ) {
         commentsCalcuStarAverage.forEach((comment) => {
-            sumStar += parseFloat(comment?.star);
+            sumStar += parseFloat(comment?.star); // Cộng dồn các sao từ từng bình luận
         });
 
         // Tính trung bình và làm tròn kết quả
@@ -242,35 +224,18 @@ const ProductItem = () => {
         console.log("Không có bình luận hoặc dữ liệu bình luận không hợp lệ.");
     }
 
-    // useEffect(() => {
-    //   const productUpdate = {
-    //     ...productInfo,
-    //     star: result,
-    //   };
-    //   dispatch(actUpdateProductById({ id: params.productId, productUpdate }));
-    //   // eslint-disable-next-line
-    // }, [result]);
-
+    // Hàm thay đổi số lượng sản phẩm
     const onChangeQuantityProduct = (value) => {
-        setQuantityProduct(value);
+        setQuantityProduct(value); // Cập nhật số lượng sản phẩm
     };
 
+    // Hàm đóng/mở box review
     const handleToggleBoxReview = () => {
-        setIsShowBoxReview(!isShowBoxReview);
+        setIsShowBoxReview(!isShowBoxReview); // Đổi trạng thái hiển thị box review
     };
 
-    const handleChangePage = (newPage) => {
-        dispatch(setNewPage(newPage));
-        // dispatch(
-        //   actFetchAllComments({
-        //     _page: newPage,
-        //     _limit: pagination.limitPerPage,
-        //     idProduct: params.productId,
-        //     ...params,
-        //   })
-        // );
-    };
-
+    // const handleChangePage = (newPage) => {
+    //     dispatch(setNewPage(newPage));
     // };
 
     const renderComments = (comments) => {
@@ -593,14 +558,7 @@ const ProductItem = () => {
                     </div>
                 </div>
                 <div className="mt-8">{renderComments(comments)}</div>
-                {/* <div className="mt-8 flex justify-center">
-          <Pagination
-            pageSize={pagination.limitPerPage}
-            current={pagination.currentPage}
-            total={pagination.total}
-            onChange={handleChangePage}
-          />
-        </div> */}
+
                 <div className="mt-8 flex flex-col">
                     <h3 className="text-xl font-bold mb-4 flex justify-center text-[30px]">
                         Related products

@@ -1,32 +1,25 @@
 import React from "react";
-import YourOrder from "../components/YourOrder";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { ROUTES } from "../constants/routes";
-import { Card, Icon, Badge, Result } from "antd";
-import { CheckCircleOutlined } from "@ant-design/icons";
-// import { actClearCarts } from "../../redux/features/cart/cartSlice";
+import { Result } from "antd";
 
 const CheckoutPage = () => {
+    // Lấy thông tin đơn hàng từ state của Redux store
     const { order } = useSelector((state) => state.order);
+
     console.log(order, "order");
 
-    // Nếu không có đơn hàng, chuyển hướng đến trang chủ
+    // Kiểm tra xem có đơn hàng hay không
     if (!order?.id) {
-        // dispatch(actClearCarts()); // Hành động này nên được gọi ở đây nếu cần
-        <Navigate to={ROUTES.HOME_PAGE} />;
-    }
+        // Nếu không có đơn hàng (order.id không tồn tại hoặc là null), điều hướng người dùng về trang chủ
 
-    // Tính tổng giá của đơn hàng
-    // const handleCalcuTotalPrice = () => {
-    //   const ordersInCart = order.carts;
-    //   const result = 0;
-    //   ordersInCart.forEach((item) => {
-    //     return (result += parseFloat(item.price) * item.quantity);
-    //   });
-    //   console.log(result, "result");
-    //   return result;
-    // };
+        // Lưu ý: Việc gọi hành động xóa giỏ hàng (clear carts) có thể cần thiết tại đây nếu muốn làm trống giỏ hàng
+        // dispatch(actClearCarts()); // Uncomment dòng này nếu cần xóa giỏ hàng tại đây
+
+        // Điều hướng người dùng tới trang chủ
+        return <Navigate to={ROUTES.HOME_PAGE} />;
+    }
 
     return (
         <div className="check-out-container">
@@ -66,10 +59,6 @@ const CheckoutPage = () => {
                         để thanh toán.
                     </p>
                 </div>
-                {/* Bảng chi tiết đơn hàng */}
-                {/* <div className="check-out__order-detail-table">
-                    <YourOrder isCheckoutPage={true} />
-                </div> */}
             </div>
         </div>
     );

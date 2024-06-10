@@ -4,7 +4,7 @@ export const ROUTES = {
     DETAIL_PRODUCT_PAGE: "products/:productId",
     LOGIN_PAGE: "/login",
     REGISTER_PAGE: "/register",
-    PAYMENT_PAGE: "/payment",
+    CART_PAGE: "/cart",
     USER_PROFILE_PAGE: "/user",
     USER_PASSWORD_PAGE: "/user/password",
     USER_PURCHASE_HISTORY_PAGE: "/user/purchase-history",
